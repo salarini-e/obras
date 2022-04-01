@@ -27,6 +27,9 @@ header #menu_icon a{
     color: black;
     padding: 6px 0px;
 }
+#div_mnavbar #mnavbar .btn-check:focus+.btn, .btn:focus{
+    box-shadow: none !important;
+}
 main{
     margin: 0 20px;
     background-color: white;

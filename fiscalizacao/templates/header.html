@@ -4,7 +4,11 @@
             <img src="/static/images/logo.jpg" alt="">
         </div>
         <div id="menu_icon" class="ms-auto d-flex">
-            <a class="btn my-auto" href="/c/login/?next=/"><i class="fas fa-user me-2"></i>Login</a>
+            {% if request.user.is_authenticated %}
+            <a class="btn my-auto" href="/logout"><i class="fas fa-sign-out me-2"></i>Logout</a>
+            {% else %}
+            <a class="btn my-auto" href="/login/?next={{ request.path|urlencode }}"><i class="fas fa-user me-2"></i>Login</a>
+            {% endif %}
         </div>
     </div>
 </header>

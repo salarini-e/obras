@@ -11,65 +11,77 @@
             </div>
             <div class="col-2 d-flex">
                 <span class="ms-auto">
-                    <button class="btn btn-secondary">QR Code</button>
+                    {% if success %}
+                    <a class="btn btn-secondary" href="{% url 'obra:gerar_qrcode' form.id %}">
+                        <i class="fas fa-qrcode me-2"></i>QR Code
+                    </a>
+                    {% endif %}
                 </span>
             </div>
             <div class="col-2" style="position: relative;">                
-                <input type="text" class="form-control">
+                <input onkeyup="search(this)" type="text" class="form-control">
                 <i class="fas fa-search" style="position: absolute; margin-top: -27px !important; margin-left: 75%;z-index: 2;"></i>
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <h3>Ref. 9568</h3>
+                {% if success %}
+                <h3>Ref. 1</h3>
+                {% else %}
+                <h3 class="text-danger">Não encontrado.</h3>
+                {% endif %}
             </div>
         </div>
+        <!-- dasd -->
+        {% if success %}
         <div class="row mt-4">
             <div class="col">
-                <label class="form-label">{{form.nome.label}}:</label>
-                {{form.nome|add_class:'form-control mb-3'|attr:"readonly:True"}}
+                <label class="form-label">Nome:</label>
+                <span>{{form.nome}}</span>
                 
             </div>
             <div class="col">
-                <label class="form-label text-uppercase">{{form.cno.label}}:</label>
-                {{form.cno|add_class:'form-control mb-3'|attr:"readonly:True"}}                
+                <label class="form-label text-uppercase">CNO:</label>
+                {{form.cno}}                
             </div>
             <div class="col">
-                <label class="form-label">{{form.tipo.label}}:</label>
-                {{form.tipo|add_class:'form-control mb-3'|attr:"readonly:True"}}                
+                <label class="form-label">Tipo:</label>
+                {{form.get_tipo_display}}                
             </div >
             <div class="col">
-                <label class="form-label">{{form.logradouro.label}}:</label>
-                {{form.logradouro|add_class:'form-control mb-3'|attr:"readonly:True"}}                
+                <label class="form-label">Logradouro:</label>
+                {{form.logradouro}}                
             </div>
             <div class="col-1">
-                <label class="form-label">{{form.n.label}}:</label>
-                {{form.n|add_class:'form-control mb-3'|attr:"readonly:True"}}                
+                <label class="form-label">Número:</label>
+                {{form.n}}                
             </div>
         </div>
 
         <div class="row">
             <div class="col">
-                <label class="form-label">{{form.complemento.label}}:</label>
-                {{form.complemento|add_class:'form-control mb-3'|attr:"readonly:True"}}                
+                <label class="form-label">Complemento:</label>
+                {{form.complemento}}                
             </div>
             <div class="col">
-                <label class="form-label">{{form.bairro.label}}:</label>
-                {{form.bairro|add_class:'form-control mb-3'|attr:"readonly:True"}}                
+                <label class="form-label">Bairro:</label>
+                {{form.bairro}}                
             </div>
             <div class="col">
-                <label class="form-label">{{form.cep.label}}:</label>
-                {{form.cep|add_class:'form-control mb-3'|attr:"readonly:True"}}                
+                <label class="form-label">CEP:</label>
+                {{form.cep}}                
             </div>
             <div class="col">
                 <label class="form-label">Estado:</label>
-                <input type="text" name="estado" maxlength="300" readonly class="form-control mb-3" required id="id_estado">
+                Rio de janeiro
             </div>
             <div class="col">
-                <label class="form-label">{{form.cidade.label}}:</label>
-                {{form.cidade|add_class:'form-control mb-3'|attr:"readonly:True"}}                
+                <label class="form-label">Cidade:</label>
+                {{form.cidade.nome}}                
             </div> 
         </div>  
+        {% endif %}
+        <!-- dsad -->
     </div>
 </div>
 <style>
@@ -77,4 +89,11 @@
         font-weight: bold;
     }
 </style>
+<script>
+function search(input){    
+    if (event.keyCode === 13){
+        window.location.href="/ver-obra/"+input.value        
+    }
+}
+</script>
 {% endblock %}

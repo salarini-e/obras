@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load widget_tweaks %}  
+{% block main %}
+<div class="w-100 h-100 d-flex py-5">
+    <div class="col-3 m-auto py-5">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Email</label>
+              <input type="text" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">              
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Senha</label>
+              <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+            </div>            
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

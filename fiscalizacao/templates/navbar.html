@@ -1,11 +1,21 @@
 <div id="div_mnavbar" class="row border">
     <div class="col">
         <div id="mnavbar">
-            <a href="/"><i class="fas fa-home me-2"></i>Página Inicial</a>
-            <a class="ms-4" href="{% url 'obra:cadastrar' %}"><i class="fas fa-home me-2"></i>Cadastrar Obra</a>
-            <a class="ms-4" href="{% url 'obra:visualizar' %}"><i class="fas fa-home me-2"></i>Ver Obra</a>
-            <a class="ms-4" href="{% url 'obra:gerar_qrcode' %}"><i class="fas fa-home me-2"></i>QR Code</a>
-            <a class="ms-auto" href="/django-admin"><i class="fas fa-coffee me-2"></i>Administração</a>
+            <a href="/"><i class="fas fa-home me-2"></i>Página Inicial</a>  
+            {% if request.user.is_staff %}                  
+            <div class="btn-group ms-3">
+                <button type="button" class="btn dropdown-toggle fw-bold" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-digging me-2"></i>Registro de Obras
+                </button>
+                <ul class="dropdown-menu px-4 dropdown-menu-lg-end">
+                  <li><a class="btn" href="{% url 'obra:cadastrar' %}"><i class="fas fa-file-alt me-2"></i>Registrar</a></li>
+                  <li><a class="btn" href="{% url 'obra:visualizar' 'buscar' %}"><i class="fas fa-search me-2"></i>Procurar</a></li>                  
+                </ul>
+            </div>
+            {% endif %}            
+            {% if request.user.is_superuser %}
+            <a class="ms-auto" href="/django-admin"><i class="fas fa-user-cog me-2"></i>Administração</a>
+            {% endif %}
         </div>
     </div>
 </div>
