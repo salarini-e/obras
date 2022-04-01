@@ -1,0 +1,48 @@
+body{
+    background-color: rgba(242, 248, 255, 0.822);
+}
+header #logo img{
+    height: 5rem;
+}
+
+header #logo img{
+    height: 5rem;
+}
+
+header #menu_icon a{
+    text-transform: uppercase;
+    margin-right: 48px;
+}
+#div_mnavbar{
+    margin: 20px;
+    background-color: white;
+}
+#div_mnavbar #mnavbar{
+    display: flex;
+    padding: 9px;
+}
+#div_mnavbar #mnavbar a{
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+    padding: 6px 0px;
+}
+main{
+    margin: 0 20px;
+    background-color: white;
+}
+
+.text-justify{
+    text-align: justify;
+}
+
+.btn{
+    border-radius: 0;
+}
+
+input{
+    border-radius: 0 !important;
+}
+.form-control{
+    border-radius: 0 !important;
+}

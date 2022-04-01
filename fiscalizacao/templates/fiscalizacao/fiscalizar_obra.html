@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load widget_tweaks %}  
+{% block main %}
+<div class="row">    
+    <div class="col container p-5">
+        <div class="row">
+            <div class="col">
+                <h1>DADOS DA OBRA</h1>
+            </div>
+            <div class="col-2 d-flex">
+                <span class="ms-auto">
+                    <button class="btn btn-secondary">QR Code</button>
+                </span>
+            </div>
+            <div class="col-2" style="position: relative;">                
+                <input type="text" class="form-control">
+                <i class="fas fa-search" style="position: absolute; margin-top: -27px !important; margin-left: 75%;z-index: 2;"></i>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h3>Ref. 9568</h3>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col">
+                <label class="form-label">{{form.nome.label}}:</label>
+                {{form.nome|add_class:'form-control mb-3'|attr:"readonly:True"}}
+                
+            </div>
+            <div class="col">
+                <label class="form-label text-uppercase">{{form.cno.label}}:</label>
+                {{form.cno|add_class:'form-control mb-3'|attr:"readonly:True"}}                
+            </div>
+            <div class="col">
+                <label class="form-label">{{form.tipo.label}}:</label>
+                {{form.tipo|add_class:'form-control mb-3'|attr:"readonly:True"}}                
+            </div >
+            <div class="col">
+                <label class="form-label">{{form.logradouro.label}}:</label>
+                {{form.logradouro|add_class:'form-control mb-3'|attr:"readonly:True"}}                
+            </div>
+            <div class="col-1">
+                <label class="form-label">{{form.n.label}}:</label>
+                {{form.n|add_class:'form-control mb-3'|attr:"readonly:True"}}                
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <label class="form-label">{{form.complemento.label}}:</label>
+                {{form.complemento|add_class:'form-control mb-3'|attr:"readonly:True"}}                
+            </div>
+            <div class="col">
+                <label class="form-label">{{form.bairro.label}}:</label>
+                {{form.bairro|add_class:'form-control mb-3'|attr:"readonly:True"}}                
+            </div>
+            <div class="col">
+                <label class="form-label">{{form.cep.label}}:</label>
+                {{form.cep|add_class:'form-control mb-3'|attr:"readonly:True"}}                
+            </div>
+            <div class="col">
+                <label class="form-label">Estado:</label>
+                <input type="text" name="estado" maxlength="300" readonly class="form-control mb-3" required id="id_estado">
+            </div>
+            <div class="col">
+                <label class="form-label">{{form.cidade.label}}:</label>
+                {{form.cidade|add_class:'form-control mb-3'|attr:"readonly:True"}}                
+            </div> 
+        </div>  
+    </div>
+</div>
+<style>
+    .form-control:disabled, .form-control[readonly]{               
+        font-weight: bold;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load widget_tweaks %}  
+{% block main %}
+<div id="print_page" class="d-flex">
+<button class="btn btn-dark" style="position: absolute; right: 33px; margin-top: 1px;">Imprimir</button>
+<div class="">
+    {% load qr_code %}
+    <img id="qr_code" src='{% qr_url_from_text conteudo  %}'>
+</div>
+<div class="py-4 pe-4">
+teste
+</div>
+
+
+
+</div>
+{% endblock %}

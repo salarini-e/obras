@@ -1,0 +1,11 @@
+<div id="div_mnavbar" class="row border">
+    <div class="col">
+        <div id="mnavbar">
+            <a href="/"><i class="fas fa-home me-2"></i>Página Inicial</a>
+            <a class="ms-4" href="{% url 'obra:cadastrar' %}"><i class="fas fa-home me-2"></i>Cadastrar Obra</a>
+            <a class="ms-4" href="{% url 'obra:visualizar' %}"><i class="fas fa-home me-2"></i>Ver Obra</a>
+            <a class="ms-4" href="{% url 'obra:gerar_qrcode' %}"><i class="fas fa-home me-2"></i>QR Code</a>
+            <a class="ms-auto" href="/django-admin"><i class="fas fa-coffee me-2"></i>Administração</a>
+        </div>
+    </div>
+</div>
