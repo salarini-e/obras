@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load widget_tweaks %} 
+{% block main %}
+{% if success %}
+<div class="row px-4 py-2">
+    <div class="col bg-success d-flex">
+        <p class="text-white m-auto fw-bolder py-1">Nova obra registrada com sucesso!</p>
+    </div>
+</div>
+{%endif%}
+<div class="row">    
+    <div class="col p-5">
+        <form method="post" class="form">
+            <h1 class="text-uppercase">Registrar nova obra</h1>            
+            {% csrf_token %}
+            <br>
+            <div id="contrato">                
+                <label for="">Empresa contratada:</label>
+                <input id="search_empresa" onkeyup="searchEmpresa(this)" type="text" class="form-control">                
+                <span id="searchResult"></span>
+                {% buttons %}
+                    <A class="btn btn-primary mt-3">Avançar</a>
+                {% endbuttons %}
+            </div>            
+        </form>
+    </div>
+    <div class="col p-5">
+        
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    function searchEmpresa(e){        
+        if (3<=String(e.value).length){
+            console.log('buscando '+e.value)
+            getEmpresa(e.value)
+        }else{            
+            console.log(e.value)
+        }
+        
+    }    
+    function getEmpresa(value){
+        var url = '/get_empresa/';  // get the url of the `load_cities` view        
+        $.ajax({ 
+            url: url,
+            data: {
+                'nome': value,
+            },
+            success: function(data) {                               
+                $("#searchResult").html(data);
+            }
+        });                
+    };
+    function selectThis(e){
+        document.getElementById('search_empresa').value=e.value
+        document.getElementById('searchResult').innerHTML=''
+    }
+</script>
+{% endblock %}

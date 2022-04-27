@@ -1,6 +1,13 @@
 from django.contrib import admin
 from .models import *
 
-admin.site.register(Estado)
-admin.site.register(Cidade)
+admin.site.register(Status)
+
+admin.site.register(Nota_Fiscal)
+
+admin.site.register(Empresa)
+admin.site.register(Fiscal)
+admin.site.register(Fotos)
 admin.site.register(Obra)
+admin.site.register(Contrato)
+admin.site.register(Aditivos)

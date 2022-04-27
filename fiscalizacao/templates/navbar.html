@@ -1,15 +1,18 @@
 <div id="div_mnavbar" class="row border">
     <div class="col">
         <div id="mnavbar">
-            <a href="/"><i class="fas fa-home me-2"></i>Página Inicial</a>  
+            <a href="/" class="btn"><i class="fas fa-home me-2"></i>Página Inicial</a>  
             {% if request.user.is_staff %}                  
+            <a href="{% url 'obra:cadastrar_empresa' %}" class="btn ms-4">Cadastrar Empresa</a>              
+            
             <div class="btn-group ms-3">
                 <button type="button" class="btn dropdown-toggle fw-bold" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-digging me-2"></i>Registro de Obras
+                    <i class="fa fa-digging me-2"></i>Obra
                 </button>
                 <ul class="dropdown-menu px-4 dropdown-menu-lg-end">
-                  <li><a class="btn" href="{% url 'obra:cadastrar' %}"><i class="fas fa-file-alt me-2"></i>Registrar</a></li>
+                  <li><a class="btn" href="{% url 'obra:cadastrar' %}"><i class="fas fa-file-alt me-2"></i>Cadastrar</a></li>
                   <li><a class="btn" href="{% url 'obra:visualizar' 'buscar' %}"><i class="fas fa-search me-2"></i>Procurar</a></li>                  
+                  <li><a class="btn" href="{% url 'obra:teste'%}"><i class="fas fa-code me-2"></i>Testes</a></li>                  
                 </ul>
             </div>
             {% endif %}            

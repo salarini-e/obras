@@ -4,7 +4,8 @@
 {% load widget_tweaks %}  
 {% block main %}
 <div id="print_page" class="d-flex">
-<button class="btn btn-dark" style="position: absolute; right: 33px; margin-top: 1px;">Imprimir</button>
+<button class="btn btn-dark" style="position: absolute; right: 105px; margin-top: 1px;">Imprimir</button>
+<a href="{{back_to}}" class="btn btn-secondary" style="position: absolute; right: 33px; margin-top: 1px;">Voltar</a>
 <div class="">
     {% load qr_code %}
     <img id="qr_code" src='{% qr_url_from_text conteudo  %}'>

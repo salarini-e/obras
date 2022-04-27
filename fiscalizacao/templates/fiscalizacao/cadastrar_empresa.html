@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load widget_tweaks %} 
+{% block main %}
+{% if success %}
+<div class="row px-4 py-2">
+    <div class="col bg-success d-flex">
+        <p class="text-white m-auto fw-bolder py-1">{{success}}</p>
+    </div>
+</div>
+{%endif%}
+<div class="row">    
+    <div class="col container p-5">
+        <form method="post" class="form col-5">
+            <h1 class="text-uppercase">Cadastrar empresa</h1>            
+            {% csrf_token %}
+            <br>
+            <div id="contrato">
+                {% for f in form %}
+                {% if f.name != 'cadastrado_por' %}
+                <label for="">{{f.label}}:</label>
+                {% endif %}
+                {{f|add_class:'form-control mb-3'}}            
+                {% endfor %}
+                {% buttons %}
+                    <button type="submit" class="btn btn-primary">CONFIRMAR</button>
+                {% endbuttons %}
+            </div>         
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -9,15 +9,18 @@
             <div class="col">
                 <h1>DADOS DA OBRA</h1>
             </div>
-            <div class="col-2 d-flex">
-                <span class="ms-auto">
-                    {% if success %}
-                    <a class="btn btn-secondary" href="{% url 'obra:gerar_qrcode' form.id %}">
+            {% if success %}                  
+            <div class="col-3 d-flex">
+                <span class="ms-auto">                    
+                    <a class="btn btn-dark" href="{% url 'obra:buscar' %}">
+                        <i class="fas fa-arrow-alt-circle-left me-2"></i></i></i>Voltar
+                    </a>                
+                    <a class="btn btn-secondary" href="{% url 'obra:gerar_qrcode' form.id %}?back={{ request.path|urlencode }}">
                         <i class="fas fa-qrcode me-2"></i>QR Code
-                    </a>
-                    {% endif %}
+                    </a>                
                 </span>
             </div>
+            {% endif %}
             <div class="col-2" style="position: relative;">                
                 <input onkeyup="search(this)" type="text" class="form-control">
                 <i class="fas fa-search" style="position: absolute; margin-top: -27px !important; margin-left: 75%;z-index: 2;"></i>
@@ -26,66 +29,103 @@
         <div class="row">
             <div class="col">
                 {% if success %}
-                <h3>Ref. 1</h3>
+                <h3>Ref. {{form.id}}</h3>
+                {% else %}                
+                {% if buscar %}
+
+                <table class="table">
+                    <thead>
+                        <th>Contrato</th>
+                        <th>Empresa Responsável</th>
+                        <th>Valor da Obra</th>
+                        <th>Local da Obra</th>                       
+                        <th>Fiscal da Obra</th>  
+                    </thead>
+                    <tbody>
+                        {% for o in obra %}
+                        <tr onmouseover="this.style.backgroundColor='#efefef'; this.style.cursor='pointer'" onmouseout="this.style.backgroundColor='white'" onclick="window.location.href='/ver-obra/{{o.id}}'"> 
+                            <td>{{o.id}}</td>
+                            <td>{{o.empresa}}</td>
+                            <td>R$ {{o.nota_fiscal.valor}}</td>
+                            <td>{{o.obra}}</td>
+                            <td>{{o.obra.fiscal.all.0}}</td>
+                            <td>{{o.n}}</td>
+                            <td>{{o.complemento}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>                
                 {% else %}
                 <h3 class="text-danger">Não encontrado.</h3>
                 {% endif %}
+                {% endif %}
             </div>
-        </div>
-        <!-- dasd -->
+        </div>      
         {% if success %}
-        <div class="row mt-4">
-            <div class="col">
-                <label class="form-label">Nome:</label>
-                <span>{{form.nome}}</span>
-                
+        <div class="row w-100">
+            <div class="col">                
+                    <div>
+                        <label class="form-label">Empresa Responsável:</label><br>
+                        {{form.empresa}}
+                    </div>
+                    <div>
+                        <label class="form-label">Valor previsto:</label><br>
+                        <span>R${{form.obra.valor_previsto}}</span>
+                    </div>
             </div>
             <div class="col">
-                <label class="form-label text-uppercase">CNO:</label>
-                {{form.cno}}                
+                <div>
+                    <label class="form-label">Objeto da Obra:</label><br>
+                    {{form.obra.objeto_da_obra}}                
+                </div >
+                <div>
+                    <label class="form-label">População atendida:</label><br>
+                    {{form.obra.populacao_atendida}}                
+                </div>
             </div>
-            <div class="col">
-                <label class="form-label">Tipo:</label>
-                {{form.get_tipo_display}}                
-            </div >
-            <div class="col">
-                <label class="form-label">Logradouro:</label>
-                {{form.logradouro}}                
-            </div>
-            <div class="col-1">
-                <label class="form-label">Número:</label>
-                {{form.n}}                
-            </div>
-        </div>
+            <div class="col ">
+                <div>
+                    <label class="form-label">Status:</label><br>
+                    {{form.obra.status}}                
+                </div>
+    
+                <div>
+                    <label class="form-label">Fiscal responsável:</label><br>
+                    {{form.obra.fiscal.all.0}}                
+                </div> 
 
-        <div class="row">
-            <div class="col">
-                <label class="form-label">Complemento:</label>
-                {{form.complemento}}                
             </div>
             <div class="col">
-                <label class="form-label">Bairro:</label>
-                {{form.bairro}}                
+                <div class="col">
+                    <label class="form-label">Nota fiscal:</label><br>
+                    <a href="{{form.nota_fiscal.url}}">{{form.nota_fiscal}}</a>         
+                </div>
+                <div class="col">
+                    <label class="form-label">Valor em nota:</label><br>
+                    R${{form.nota_fiscal.valor}}              
+                </div>
             </div>
-            <div class="col">
-                <label class="form-label">CEP:</label>
-                {{form.cep}}                
-            </div>
-            <div class="col">
-                <label class="form-label">Estado:</label>
-                Rio de janeiro
-            </div>
-            <div class="col">
-                <label class="form-label">Cidade:</label>
-                {{form.cidade.nome}}                
-            </div> 
-        </div>  
+            <!-- <div class="col">
+                <div class="col">
+                    <label class="form-label">Estado:</label><br>
+                    {{form.cidade.estado}}   
+                </div>
+                <div class="col">
+                    <label class="form-label">Cidade:</label><br>
+                    {{form.cidade.nome}}                
+                </div>
+            </div> -->
+           
+        </div>
         {% endif %}
         <!-- dsad -->
     </div>
 </div>
 <style>
     .form-control:disabled, .form-control[readonly]{               
+        font-weight: bold;
+    }
+    label{
         font-weight: bold;
     }
 </style>
