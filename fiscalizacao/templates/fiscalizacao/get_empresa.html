@@ -1,4 +1,10 @@
 
 {% for empresa in empresas %}
-<input type="text" onclick="selectThis(this)" class="form-control" value="{{empresa.nome}}">
+<input type="text" onclick="selectThis(this)" class="form-control mouseHover" value="{{empresa.nome}}">
 {% endfor %}
+
+<style>
+    .mouseHover:hover{
+        cursor: pointer;
+    }
+</style>

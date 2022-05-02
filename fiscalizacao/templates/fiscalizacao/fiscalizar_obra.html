@@ -38,7 +38,7 @@
                         <th>Contrato</th>
                         <th>Empresa Responsável</th>
                         <th>Valor da Obra</th>
-                        <th>Local da Obra</th>                       
+                        <th>Objeto da Obra</th>                       
                         <th>Fiscal da Obra</th>  
                     </thead>
                     <tbody>
@@ -47,7 +47,7 @@
                             <td>{{o.id}}</td>
                             <td>{{o.empresa}}</td>
                             <td>R$ {{o.nota_fiscal.valor}}</td>
-                            <td>{{o.obra}}</td>
+                            <td>{{o.obra.objeto_da_obra}}</td>
                             <td>{{o.obra.fiscal.all.0}}</td>
                             <td>{{o.n}}</td>
                             <td>{{o.complemento}}</td>

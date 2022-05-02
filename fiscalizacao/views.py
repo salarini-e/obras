@@ -103,21 +103,71 @@ def fiscalizar_obra(request, valor_busca='buscar'):
                 success=True
             except:
             
-                contratos=Contrato.objects.filter(empresa=Empresa.objects.get(nome=valor_busca))        
+                contratos=Contrato.objects.filter(empresa=Empresa.objects.get(nome__icontains=valor_busca))        
                 success=False
                 buscar=True
-                contrato=Form_Contrato()
+                contrato=Form_Contrato()                
                 if len(contratos)==1:
                     success=True                        
                     buscar=False
-                    contrato=Contrato.objects.get(empresa=Empresa.objects.get(nome=valor_busca))
+                    contrato=Contrato.objects.get(empresa=Empresa.objects.get(nome__icontains=valor_busca))
                 elif len(contratos)==0:
                     success=False
                     buscar=False
                     contrato=Form_Contrato()                                    
         except:
-            success=False
-            contrato=Form_Contrato()
+            try:
+                fiscais=Fiscal.objects.filter(nome__icontains=valor_busca)                
+                obras=[]   
+                obra_fiscal=[]             
+                for fiscal in fiscais:                    
+                    obra_fiscal.append(Obra_Fiscal.objects.filter(fiscal=fiscal))        
+                if len(obra_fiscal)==1:
+                    try:
+                        obras.append(obra_fiscal[0].obra)
+                    except:
+                        obras.append(obra_fiscal[0])
+                else:
+                    for i in obra_fiscal:
+                        if len(i)>1:                            
+                            for o in i:
+                                print('a', o)
+                                try:
+                                    obras.append(o.obra)
+                                except:
+                                    obras.append(o)
+                        else:
+                            
+                            try:
+                                obras.append(i[0].obra)
+                            except:
+                                obras.append(i[0])
+                contrato=Form_Contrato()                
+                
+                for obra in obras:                    
+                    try:
+                        contratos.append(Contrato.objects.filter(obra=obra.id))                
+                    except:                        
+                        for o in obra:
+                            contratos.append(Contrato.objects.filter(obra=o.obra.id))   
+                             
+                if len(contratos)==1:
+                    success=True                        
+                    buscar=False                    
+                elif len(contratos)==0:
+                    success=False
+                    buscar=False
+                    contrato=Form_Contrato()
+                success=False
+                buscar=True
+                contratos_=[]
+                for contrato in contratos:
+                    contratos_.append(contrato[0])
+                contratos=contratos_
+            except Exception as E:
+                print('ops', E)
+                success=False
+                contrato=Form_Contrato()
     context={
         'form': contrato,
         'success':success,
