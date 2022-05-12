@@ -91,7 +91,8 @@ class Obra(models.Model):
     justificativa=models.TextField(verbose_name='Justificativa')
     cadastrado_por=models.ForeignKey(User, on_delete=models.PROTECT)
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão') 
-
+    #latitude e longitude
+    
     def __str__(self):
         return '%s %s' % (self.id, self.objeto_da_obra)
 

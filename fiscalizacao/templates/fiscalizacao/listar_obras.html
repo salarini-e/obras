@@ -3,9 +3,108 @@
 {% load bootstrap5 %}
 {% load widget_tweaks %}  
 {% block main %}
-<div class="row">
+<style>
+       .lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgb(0, 0, 0);
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+</style>
+<div class="row">    
     <div class="col container p-5">
-        <a href="/fiscal/9568"></a>
+        <div class="row">
+            <div class="col">
+                <h1>DADOS DA OBRA</h1>
+            </div>
+            <div class="col-2" style="position: relative;">                
+                <input onkeyup="search(this)" type="text" class="form-control">
+                <i class="fas fa-search" style="position: absolute; margin-top: -27px !important; margin-left: 75%;z-index: 2;"></i>
+            </div>
+        </div>                
+        <div class="row">
+            <div class="col d-flex flex-column" id="searchResult">                
+                
+            </div>
+        </div>      
     </div>
 </div>
+<style>
+    .form-control:disabled, .form-control[readonly]{               
+        font-weight: bold;
+    }
+    label{
+        font-weight: bold;
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+function search(input){    
+    getObra(input.value)
+}
+
+function getObra(value){
+        $("#searchResult").html("<div class='row mt-4'><div class='col d-flex'><div class='m-auto lds-ellipsis'><div></div><div></div><div></div><div></div></div></div></div>")
+        var url = '/get-obras/';  // get the url of the `load_cities` view        
+        $.ajax({ 
+            url: url,
+            data: {
+                'nome': value,
+            },
+            success: function(data) {                               
+                $("#searchResult").html(data);
+            }
+        });                
+    };
+    getObra('')
+</script>
 {% endblock %}

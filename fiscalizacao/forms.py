@@ -1,8 +1,8 @@
 from .models import Contrato, Empresa, Estado, Nota_Fiscal, Obra
+from .validations import validate_CNPJ
 
 from django import forms
 from django.forms import ModelForm, ValidationError
-
 
 class Form_Obras(ModelForm): 
     class Meta:
@@ -11,10 +11,17 @@ class Form_Obras(ModelForm):
         exclude = ['dt_inclusao']
 
 class Form_Empresa(ModelForm): 
+    cnpj=forms.CharField(label="CNPJ", max_length=18, required=True,  widget = forms.TextInput(attrs={'onkeydown':"mascara(this,icnpj)"}))
     class Meta:
         model = Empresa
         widgets = {'cadastrado_por': forms.HiddenInput()}
         exclude = ['dt_inclusao']
+
+    def clean_cnpj(self):
+        cnpj = validate_CNPJ(self.cleaned_data["cnpj"])
+        cnpj = cnpj.replace('.', '')
+        cnpj = cnpj.replace('-', '')
+        return cnpj
 
 class Form_Nota(ModelForm): 
     class Meta:

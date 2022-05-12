@@ -29,6 +29,12 @@ def cadastrar_empresa(request):
     return render(request, 'fiscalizacao/cadastrar_empresa.html', context)
 
 @login_required
+def listar_empresa(request):
+    context={
+        'empresas': Empresa.objects.all()
+    }
+    return render(request, 'fiscalizacao/listar_empresa.html', context)
+@login_required
 def teste(request):
     form=Form_Contrato()      
     context={
@@ -177,37 +183,51 @@ def fiscalizar_obra(request, valor_busca='buscar'):
     return render(request, 'fiscalizacao/fiscalizar_obra.html', context)
 
 @login_required
-def gerar_qr_code(request, obra_id):
-    contrato=Contrato.objects.get(id=obra_id)
-    fiscais=''
-    if len(contrato.obra.fiscal.all())==1:        
-        for fiscal in contrato.obra.fiscal.all():
-            fiscais=fiscal
-    else:
-        for fiscal in contrato.obra.fiscal.all():
-            fiscais+=fiscal+', '
+def get_obras(request):
+    from django.db.models import Q
 
-    conteudo = f'''Identificação da obra: {obra_id}
-Objeto da obra: {contrato.obra.objeto_da_obra}
-Justificativa: {contrato.obra.justificativa}
-População atendida: {contrato.obra.populacao_atendida}
-Valor previsto: {contrato.obra.valor_previsto}
-Data da ordem de serviço: ????
-Data da conclusão da obra: ????
-Empresa(s): {contrato.empresa.nome} (?)
-Aditivos: ????
-Fotos: link
-Cronograma da obra: link
-Nome do agente público responsável pela fiscalização: {fiscal}
-'''
-    print(contrato.obra.fiscal.all)
-    try:
-        back_to=request.GET.get('back')
-    except:
-        back_to='/ver-obra/buscar'
+    valor=request.GET.get('nome')
+
+    if valor!='':
+        complexQuery = Q(empresa__nome__icontains=valor) | Q(id__icontains=valor) | Q(obra__objeto_da_obra__icontains=valor)
+        obras=Contrato.objects.filter(complexQuery)
+        context={           
+            'obras': obras
+        }
+        if len(obras)==0:
+            context={
+                'alert': True,
+                'obras': Contrato.objects.all()
+            }
+    else:            
+        context={
+            'alert': False,
+            'obras': Contrato.objects.all()
+        }
+    return render(request, 'fiscalizacao/get_obras.html', context)
+
+@login_required
+def listar_obras(request, valor_busca):
+    obras=Contrato.objects.all()
+    context={
+        'obras': obras
+    }
+    return render(request, 'fiscalizacao/listar_obras.html', context)
+
+@login_required
+def visualizar_obra(request, id):
+    obra=Contrato.objects.get(id=id)
+    context={
+        'obra': obra
+    }
+    return render(request, 'fiscalizacao/listar_itens_obra.html', context)
+
+@login_required
+def gerar_qr_code(request, obra_id):
+    conteudo = f'''localhost:8000/gerar-qr-code/{obra_id}'''
     context={
         'conteudo': conteudo,
-        'back_to': back_to
+        'obra_id': obra_id
     }
 
     return render(request, 'fiscalizacao/gerar_qr_code.html', context)    

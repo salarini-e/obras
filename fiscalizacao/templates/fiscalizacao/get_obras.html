@@ -1,0 +1,41 @@
+{% if alert %}
+<div class="row my-2">
+    <div class="col bg-danger d-flex p-3">
+        <span class="text-white my-auto">Nenhuma obra encontrada com esse filtro.</span>
+    </div>
+</div>
+{% endif %}
+<table class="table table-light table-striped table-hover text-center">
+    <thead>
+        <tr>
+            <th></th>
+            <th scope="col">id</th>
+            <th scope="col">Empresa</th>                          
+            <th>Objeto da Obra</th>
+            <th>Valor Previsto</th>
+            <th>Fiscal Responsável</th>          
+            <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for contrato in obras %}
+        <tr>                            
+            <td>
+                <a href="{% url 'obra:visualizar_obra' contrato.id %}">
+                    <i class="fas fa-eye"></i>
+                </a>
+            </td>
+            <th  scope="row">{{ contrato.id }}</th>                            
+            <td>{{contrato.empresa.nome}}</td>                            
+            <td>{{contrato.obra.objeto_da_obra}}</td>                            
+            <td>{{contrato.obra.valor_previsto}}</td>
+            <td>{{contrato.obra.fiscal.all.0}}</td>            
+            <td>
+                <a href="#">
+                    <i class="fas fa-qrcode"></i>
+                </a>
+            </td>
+        </tr>    
+        {% endfor %}
+      </tbody>
+</table>

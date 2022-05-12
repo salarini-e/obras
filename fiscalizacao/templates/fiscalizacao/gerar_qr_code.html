@@ -3,18 +3,37 @@
 {% load bootstrap5 %}
 {% load widget_tweaks %}  
 {% block main %}
+<style>
+    @media print {
+        .print-me, .print-me * {
+            visibility: visible;
+        }
+        body * {
+            visibility: hidden;
+        }
+    }
+</style>
 <div id="print_page" class="d-flex">
-<button class="btn btn-dark" style="position: absolute; right: 105px; margin-top: 1px;">Imprimir</button>
-<a href="{{back_to}}" class="btn btn-secondary" style="position: absolute; right: 33px; margin-top: 1px;">Voltar</a>
-<div class="">
+<div>
+    <button onclick="printQR()" class="btn btn-dark" style="position: absolute; right: 125px; margin-top: 1px;">Imprimir</button>
+    <a href="{% url 'obra:visualizar_obra' obra_id %}" class="btn btn-secondary" style="position: absolute; right: 48px; margin-top: 1px;">Voltar</a>
+</div>
+<div>
     {% load qr_code %}
-    <img id="qr_code" src='{% qr_url_from_text conteudo  %}'>
+    <div class="print-me">
+        <img id="qr_code" src='{% qr_url_from_text conteudo  %}'>
+    </div>    
 </div>
 <div class="py-4 pe-4">
 
 </div>
-
-
-
 </div>
+<script>
+    function printQR(){
+        window.print();
+        setTimeout(function(){
+        window.close();
+        },2000);
+    }
+</script>
 {% endblock %}

@@ -3,7 +3,7 @@
         <div id="mnavbar">
             <a href="/" class="btn"><i class="fas fa-home me-2"></i>Página Inicial</a>  
             {% if request.user.is_staff %}                  
-            <a href="{% url 'obra:cadastrar_empresa' %}" class="btn ms-4">Cadastrar Empresa</a>              
+            <a href="{% url 'obra:cadastrar_empresa' %}" class="btn ms-4">Empresas</a>              
             
             <div class="btn-group ms-3">
                 <button type="button" class="btn dropdown-toggle fw-bold" data-bs-toggle="dropdown" aria-expanded="false">

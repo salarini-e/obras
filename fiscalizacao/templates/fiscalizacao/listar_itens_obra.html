@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load widget_tweaks %}  
+{% block main %}
+
+<div class="row">    
+    <div class="col container p-5">
+        <div class="row">
+            <div class="col">
+                <h1>DADOS DA OBRA</h1>
+            </div>
+            <div class="col-3 d-flex" style="position: relative;">   
+                <a class="btn btn-primary ms-auto me-2 my-auto" href="{% url 'obra:gerar_qrcode' obra.id %}">
+                    QR Code <i class="fas fa-qrcode ms-2"></i>
+                </a>             
+                <a class="btn btn-primary my-auto" href="{% url 'obra:visualizar' obra.id %}">
+                    Voltar
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-4" id="searchResult">   
+                <div class="p-3">
+                    <div class="mb-2" style="background-color: #d6e7f8;">
+                        <div class="py-3 px-3">                        
+                            <div class="d-flex ps-4">
+                                <span class="my-auto"><b>id: </b>{{obra.id}}</span>
+                                <span class="ms-auto">
+                                    <button class="btn btn-success me-2">Ver Fotos</button>
+                                    <button class="btn btn-success">Ver Notas</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>                
+                    <table class="table table-light table-striped mt-0">                                   
+                        <tbody>                        
+                            <tr>                   
+                                <!-- <th class="text-end">id:</th>          
+                                <td>{{obra.id}}</td>   -->
+                                <td colspan="2" class="px-3">
+                                    <b>Empresa:</b><br>
+                                    <span>{{obra.empresa.nome}}</span>
+                                </td>         
+                                <td colspan="2" class="px-3">
+                                    <b>Objeto da Obra:</b><br>
+                                    <span>{{obra.obra.objeto_da_obra}}</span>    
+                                </td>
+                                <td colspan="2">
+                                    <b>Valor previsto:</b><br>
+                                    <span>{{obra.obra.valor_previsto}}</span>
+                                </td>
+                                <td colspan="2">
+                                    <b>Valor em nota:</b><br>
+                                    <span>{{obra.nota_fiscal.valor}}</span>
+                                </td>           
+                            </tr>    
+                            <tr>                   
+                                <!-- <th class="text-end"></th>          
+                                <td><button class="btn btn-primary">Notas</button></td>   -->
+                                <td colspan="2" class="px-3">
+                                    <b>CNPJ da empresa:</b><br>                      
+                                    <span class="cnpj">{{obra.empresa.cnpj}}</span>
+                                </td>         
+                                <td colspan="2">
+                                    <b>População atendida:</b><br>
+                                    <span>{{obra.obra.populacao_atendida}}</span>
+                                </td>
+                                <td colspan="2" class="px-3">
+                                    <b>Fiscal Responsável:</b><br>                      
+                                    <span class="cnpj">{{obra.obra.fiscal.all.0}}</span>
+                                </td>  
+                                <td colspan="2" class="px-3">
+                                    <b>Status:</b><br>                      
+                                    <span class="cnpj">{{obra.obra.status}}</span>
+                                </td>  
+                                 
+                            </tr>   
+                            <tr>
+                                <td colspan="8" class="p-3">
+                                    <b>Justificativa:</b>
+                                    <p>
+                                        {{obra.obra.justificativa}}
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <b class="ms-2">Data de Inclusão:</b> <span>{{obra.obra.dt_inclusao}}</span>
+                                </td>
+                                <td colspan="2" >
+                                    <b>Cadastrado por:</b> <span class="text-capitalize ms-3">{{obra.obra.cadastrado_por}}</span>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>                               
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>      
+    </div>
+</div>
+<style>
+.form-control:disabled, .form-control[readonly]{               
+font-weight: bold;
+}
+label{
+font-weight: bold;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+function search(input){    
+getObra(input.value)
+}
+
+function getObra(value){
+var url = '/get-obras/';  // get the url of the `load_cities` view        
+$.ajax({ 
+    url: url,
+    data: {
+        'nome': value,
+    },
+    success: function(data) {                               
+        $("#searchResult").html(data);
+    }
+});                
+};
+</script>
+{% endblock %}
