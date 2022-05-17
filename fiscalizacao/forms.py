@@ -1,4 +1,4 @@
-from .models import Contrato, Empresa, Estado, Nota_Fiscal, Obra
+from .models import Contrato, Empresa, Estado, Fiscal, Nota_Fiscal, Obra
 from .validations import validate_CNPJ
 
 from django import forms
@@ -7,6 +7,13 @@ from django.forms import ModelForm, ValidationError
 class Form_Obras(ModelForm): 
     class Meta:
         model = Obra
+        widgets = {'cadastrado_por': forms.HiddenInput()}
+        exclude = ['dt_inclusao']
+
+class Form_Fiscal(ModelForm): 
+    
+    class Meta:
+        model = Fiscal
         widgets = {'cadastrado_por': forms.HiddenInput()}
         exclude = ['dt_inclusao']
 

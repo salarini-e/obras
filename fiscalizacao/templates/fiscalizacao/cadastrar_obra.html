@@ -12,19 +12,28 @@
 {%endif%}
 <div class="row">    
     <div class="col container p-5">
-        <form method="post" class="form col-5">
-            <h1 class="text-uppercase">Registrar nova obra</h1>            
+        <div class="row">
+            <div class="col d-flex">
+                <h1 class="text-uppercase">Registrar nova obra</h1>            
+                <span class="ms-auto">
+                    <a class="btn btn-primary" href="{% url 'obra:visualizar' 'buscar' %}">
+                        Listar Obras
+                    </a>
+                </span>
+            </div>
+        </div>
+        <form method="post" class="form col-5">            
             {% csrf_token %}
             <br>
             <div id="contrato">                
                 <label for="">Empresa contratada:</label>
-                <input autocomplete="off" name="empresa" id="search_empresa" onkeyup="searchEmpresa(this)" type="text" class="form-control">                
-                <span id="searchResult"></span>
-                {% buttons %}
-                    <a onclick="exibirFormNota()" class="btn btn-primary mt-3">Avançar</a>
-                {% endbuttons %}
+                <input name="empresa" id="search_empresa" onkeyup="searchEmpresa(this)" type="text" class="form-control" autocomplete="off">                
+                <span id="searchResult"></span> 
+                {% if error %}
+                <br>{{error}}
+                {% endif %}
             </div>           
-            <div id="nota_fiscal">
+            <div id="nota_fiscal" class="mt-4">
                 {% for f_nota in form_nota %}
                 {% if f_nota.label == 'Data de expedição' %}
                 <label for="">{{f_nota.label}}:</label>
@@ -33,12 +42,9 @@
                 <label for="">{{f_nota.label}}:</label>
                 {{f_nota|add_class:'form-control mb-3'|attr:'type:text'|attr:'autocomplete:off'}}            
                 {% endif %}
-                {% endfor %}                
-                {% buttons %}
-                    <a onclick="exibirFormObra()" class="btn btn-primary">Avançar</a>
-                {% endbuttons %}
+                {% endfor %}                                
             </div>
-            <div id="obra">
+            <div id="obra" class="mt-4">
                 {% for f_obra in form_obra %}
                 {% if f_obra.name != 'cadastrado_por' %}
                 <label for="">{{f_obra.label}}:</label>
@@ -75,13 +81,13 @@
         document.getElementById('search_empresa').value=e.value
         document.getElementById('searchResult').innerHTML=''
     }
-    document.getElementById('nota_fiscal').style.display='none';
-    document.getElementById('obra').style.display='none';
-    function exibirFormNota(){
-        document.getElementById('nota_fiscal').style.display='block';
-    }
-    function exibirFormObra(){
-        document.getElementById('obra').style.display='block';
-    }
+    // document.getElementById('nota_fiscal').style.display='none';
+    // document.getElementById('obra').style.display='none';
+    // function exibirFormNota(){
+    //     document.getElementById('nota_fiscal').style.display='block';
+    // }
+    // function exibirFormObra(){
+    //     document.getElementById('obra').style.display='block';
+    // }
 </script>
 {% endblock %}

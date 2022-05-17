@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from .forms import Form_Contrato, Form_Nota, Form_Obras, Form_Empresa
+from .forms import Form_Contrato, Form_Fiscal, Form_Nota, Form_Obras, Form_Empresa
 from .models import *
 from django.contrib.auth.decorators import login_required
 
+from settings.settings import BASE_DIR
+import os
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -29,11 +31,39 @@ def cadastrar_empresa(request):
     return render(request, 'fiscalizacao/cadastrar_empresa.html', context)
 
 @login_required
+def cadastrar_fiscal(request): 
+    if request.method=='POST':  
+        form=Form_Fiscal(request.POST)   
+        print(form)           
+        if form.is_valid():
+            form.save()            
+            context={
+                'form': Form_Fiscal(initial={'cadastrado_por':request.user}),
+                'success': 'Empresa cadastrada com sucesso!'
+            }
+            return render(request, 'fiscalizacao/cadastrar_fiscais.html', context) 
+    else:
+        form=Form_Fiscal(initial={'cadastrado_por':request.user})
+    print(form)           
+    context={
+            'form': form,
+    }
+    return render(request, 'fiscalizacao/cadastrar_fiscais.html', context)
+
+@login_required
 def listar_empresa(request):
     context={
         'empresas': Empresa.objects.all()
     }
     return render(request, 'fiscalizacao/listar_empresa.html', context)
+
+@login_required
+def listar_fiscais(request):
+    context={
+        'fiscais': Fiscal.objects.all()
+    }
+    return render(request, 'fiscalizacao/listar_fiscais.html', context)
+
 @login_required
 def teste(request):
     form=Form_Contrato()      
@@ -74,20 +104,28 @@ def cadastrar_obra(request):
                     nota=form_nota.save()
                     contrato=Contrato(obra=obra, empresa=empresa, nota_fiscal=nota)
                     contrato.save()
+                    os.mkdir(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(contrato.id))
+                    error=False
                 except Exception as E:
+                    error=str(E)
                     print(E)
-                context={
+                context={      
+                    'error': error,               
                     'form_nota': Form_Nota(),
                     'form_obra': Form_Obras(),
                     'success': 'Obracadastrada com sucesso!'
                 }
                 return render(request, 'fiscalizacao/cadastrar_obra.html', context)
+        else:
+            error='ERROR'
 
     else:
+        error=False
         form_nota=Form_Nota()
         form_obra=Form_Obras(initial={'cadastrado_por':request.user})    
 
     context={
+        'error': error,
         'form_nota': form_nota,
         'form_obra': form_obra,
     }
@@ -221,6 +259,18 @@ def visualizar_obra(request, id):
         'obra': obra
     }
     return render(request, 'fiscalizacao/listar_itens_obra.html', context)
+
+@login_required
+def visualizar_fotos_obra(request, id):
+    obra=Contrato.objects.get(id=id)
+    fotos=Fotos.objects.filter(obra=obra.obra.id)
+    if request.method=='POST':
+        print('ok')
+    context={
+        'fotos': fotos,
+        'obra': obra
+    }
+    return render(request, 'fiscalizacao/listar_fotos_obra.html', context)
 
 @login_required
 def gerar_qr_code(request, obra_id):

@@ -31,7 +31,7 @@
             <td>{{contrato.obra.valor_previsto}}</td>
             <td>{{contrato.obra.fiscal.all.0}}</td>            
             <td>
-                <a href="#">
+                <a href="{% url 'obra:gerar_qrcode' contrato.obra.id %}" target="_blank">
                     <i class="fas fa-qrcode"></i>
                 </a>
             </td>

@@ -13,7 +13,7 @@
 <div class="row">    
     <div class="col container p-5">
         <div class="d-flex">
-            <h1 class="text-uppercase">Cadastrar empresa</h1>            
+            <h1 class="text-uppercase">Empresas</h1>            
             <span class="ms-auto"><a class="btn btn-primary" href="{% url 'obra:cadastrar_empresa' %}">Cadastrar Empresa</a></span>
         </div>
         <div class="d-flex pt-4">
@@ -41,21 +41,7 @@
     </div>
 </div>
 <script>
-    function icnpj(v){
-        v=v.replace(/\D/g,"")                    //Remove tudo o que nao e digito
-        v=v.replace(/(\d{2})(\d)/,"$1.$2")       //Coloca um ponto entre o segundo e terceiro digitos
-        v=v.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o quinto e o sexto digitos
-        v=v.replace(/(\d{3})(\d)/,"$1/$2")       //Coloca um ponto entre o quinto e o sexto digitos
-        v=v.replace(/(\d{4})(\d)/,"$1-$2")       //Coloca um ponto entre o quinto e o sexto digitos
-        // v=v.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5")
-        return v
-    }
-    cnpjs=document.getElementsByClassName('cnpj')
-    for (i in cnpjs){
-        console.log(cnpjs[i].innerText)
-        cnpjs[i].innerText=icnpj(cnpjs[i].innerText)
-        console.log(cnpjs[i].innerText)
-    }
+    
 </script>
 
 {% endblock %}

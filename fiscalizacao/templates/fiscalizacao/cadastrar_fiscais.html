@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load widget_tweaks %} 
+{% block main %}
+{% if success %}
+<div class="row px-4 py-2">
+    <div class="col bg-success d-flex">
+        <p class="text-white m-auto fw-bolder py-1">{{success}}</p>
+    </div>
+</div>
+{%endif%}
+<div class="row">    
+    <div class="col container p-5">
+        <div class="d-flex">
+            <h1 class="text-uppercase">Cadastrar Fiscal</h1>            
+            <span class="ms-auto">
+                <a class="btn btn-primary" href="{% url 'obra:listar_fiscais' %}">
+                    Listar Fiscais
+                </a>
+            </span>
+        </div>
+        <form method="post" class="form col-5">            
+            {% csrf_token %}
+            <br>
+            <div id="contrato">
+                {% for f in form %}
+                {% if f.name != 'cadastrado_por' %}
+                <label for="">{{f.label}}:</label>
+                {% endif %}
+                {{f|add_class:'form-control mb-3'}}            
+                {% endfor %}
+                {% buttons %}
+                    <button type="submit" class="btn btn-primary">CONFIRMAR</button>
+                {% endbuttons %}
+            </div>         
+        </form>
+    </div>
+</div>
+<script>
+    function icnpj(v){
+        v=v.replace(/\D/g,"")                    //Remove tudo o que nao e digito
+        v=v.replace(/(\d{2})(\d)/,"$1.$2")       //Coloca um ponto entre o segundo e terceiro digitos
+        v=v.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o quinto e o sexto digitos
+        v=v.replace(/(\d{3})(\d)/,"$1/$2")       //Coloca um ponto entre o quinto e o sexto digitos
+        v=v.replace(/(\d{4})(\d)/,"$1-$2")       //Coloca um ponto entre o quinto e o sexto digitos
+        // v=v.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5")
+        return v
+    }
+    function mascara(o,f){
+        v_obj=o
+        v_fun=f
+        setTimeout("execmascara()",1)
+    }            
+    function execmascara(){
+        v_obj.value=v_fun(v_obj.value)
+    }    
+</script>
+{% endblock %}

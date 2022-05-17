@@ -10,10 +10,13 @@
             <div class="col">
                 <h1>DADOS DA OBRA</h1>
             </div>
-            <div class="col-3 d-flex" style="position: relative;">   
+            <div class="col d-flex" style="position: relative;">   
                 <a class="btn btn-primary ms-auto me-2 my-auto" href="{% url 'obra:gerar_qrcode' obra.id %}">
                     QR Code <i class="fas fa-qrcode ms-2"></i>
                 </a>             
+                <a class="btn btn-primary me-2 my-auto" href="{% url 'obra:gerar_qrcode' obra.id %}">
+                    Editar <i class="fas fa-pencil-alt ms-2"></i>
+                </a>       
                 <a class="btn btn-primary my-auto" href="{% url 'obra:visualizar' obra.id %}">
                     Voltar
                 </a>
@@ -27,8 +30,8 @@
                             <div class="d-flex ps-4">
                                 <span class="my-auto"><b>id: </b>{{obra.id}}</span>
                                 <span class="ms-auto">
-                                    <button class="btn btn-success me-2">Ver Fotos</button>
-                                    <button class="btn btn-success">Ver Notas</button>
+                                    <a href="{% url 'obra:visualizar_fotos_obra' obra.id %}" class="btn btn-success me-2">Fotos</a>
+                                    <button class="btn btn-success">Notas</button>
                                 </span>
                             </div>
                         </div>

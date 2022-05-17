@@ -66,9 +66,14 @@
             <div class="col">
                 <h1>DADOS DA OBRA</h1>
             </div>
-            <div class="col-2" style="position: relative;">                
-                <input onkeyup="search(this)" type="text" class="form-control">
-                <i class="fas fa-search" style="position: absolute; margin-top: -27px !important; margin-left: 75%;z-index: 2;"></i>
+            <div class="col d-flex">              
+              <div class="my-auto ms-auto" style="position: relative; width: 180px;">              
+                  <input onkeyup="search(this)" type="text" class="form-control">
+                  <i class="fas fa-search" style="position: absolute; margin-top: -27px !important; margin-left: 85%;z-index: 2;"></i>
+              </div>
+              <a class="btn btn-primary ms-3 my-auto" href="{% url 'obra:cadastrar' %}">
+                Voltar
+              </a>  
             </div>
         </div>                
         <div class="row">

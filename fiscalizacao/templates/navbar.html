@@ -3,18 +3,21 @@
         <div id="mnavbar">
             <a href="/" class="btn"><i class="fas fa-home me-2"></i>Página Inicial</a>  
             {% if request.user.is_staff %}                  
-            <a href="{% url 'obra:cadastrar_empresa' %}" class="btn ms-4">Empresas</a>              
+            <a href="{% url 'obra:cadastrar_fiscal' %}" class="btn ms-5">Fiscais</a>              
+            <a href="{% url 'obra:cadastrar_empresa' %}" class="btn ms-5">Empresas</a>              
+            <a href="{% url 'obra:cadastrar' %}" class="btn ms-5">Obras</a>              
+            <!-- <a href="{% url 'obra:teste' %}" class="btn ms-4">Pag. de Testes</a>               -->
             
-            <div class="btn-group ms-3">
+            <!-- <div class="btn-group ms-3">
                 <button type="button" class="btn dropdown-toggle fw-bold" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa fa-digging me-2"></i>Obra
                 </button>
                 <ul class="dropdown-menu px-4 dropdown-menu-lg-end">
                   <li><a class="btn" href="{% url 'obra:cadastrar' %}"><i class="fas fa-file-alt me-2"></i>Cadastrar</a></li>
                   <li><a class="btn" href="{% url 'obra:visualizar' 'buscar' %}"><i class="fas fa-search me-2"></i>Procurar</a></li>                  
-                  <!-- <li><a class="btn" href="{% url 'obra:teste'%}"><i class="fas fa-code me-2"></i>Testes</a></li>                   -->
+                  <li><a class="btn" href="{% url 'obra:teste'%}"><i class="fas fa-code me-2"></i>Testes</a></li>                  
                 </ul>
-            </div>
+            </div> -->
             {% endif %}            
             {% if request.user.is_superuser %}
             <a class="ms-auto" href="/django-admin"><i class="fas fa-user-cog me-2"></i>Administração</a>

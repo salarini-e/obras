@@ -18,10 +18,14 @@ urlpatterns = [
     path('get-obras/', views.get_obras, name='get_obras' ),
     path('dados-obras/<valor_busca>', views.listar_obras, name='visualizar' ),
     path('dados-obras/v/<id>', views.visualizar_obra, name='visualizar_obra' ),
+    path('dados-obras/v/<id>/fotos', views.visualizar_fotos_obra, name='visualizar_fotos_obra' ),
 
     path('cadastrar-empresa/', views.cadastrar_empresa, name='cadastrar_empresa' ),
     path('listar-empresa/', views.listar_empresa, name='listar_empresa' ),
     
+    path('cadastrar-fiscal/', views.cadastrar_fiscal, name='cadastrar_fiscal' ),
+    path('listar-fiscais/', views.listar_fiscais, name='listar_fiscais' ),
+
     path('ver-obra/', views.fiscalizar_obra, name='buscar' ),
     # path('ver-obra/<valor_busca>', views.fiscalizar_obra, name='visualizar' ),
     path('gerar-qr-code/<obra_id>', views.gerar_qr_code, name='gerar_qrcode' ),
