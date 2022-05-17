@@ -3,7 +3,8 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from .forms import Form_Contrato, Form_Fiscal, Form_Nota, Form_Obras, Form_Empresa
 from .models import *
 from django.contrib.auth.decorators import login_required
-
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 from settings.settings import BASE_DIR
 import os
 # Create your views here.
@@ -262,15 +263,99 @@ def visualizar_obra(request, id):
 
 @login_required
 def visualizar_fotos_obra(request, id):
-    obra=Contrato.objects.get(id=id)
-    fotos=Fotos.objects.filter(obra=obra.obra.id)
+    obra=Contrato.objects.get(id=id)    
     if request.method=='POST':
-        print('ok')
+        files=[]               
+        for item in request.FILES:                        
+            files.append(request.FILES[item])                   
+        lista=os.listdir(os.path.join(BASE_DIR, 'fiscalizacao/static')+'/fotos/'+str(id))
+        try:
+            lista.remove('arquivado')
+        except:
+            pass
+        count=len(files)                
+        if count>0:
+            foto=Fotos(obra=Obra.objects.get(id=id), url="")
+            foto.save()
+            foto.url=str(foto.id)+'.jpg'            
+            foto.save()
+            count=int(foto.id)
+        for file in files:  
+            if count<10:
+                file_name='0'+str(count)
+            else:
+                file_name=str(count)
+            path = default_storage.save(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+id+"/"+str(file_name)+".jpg", ContentFile(file.read()))                        
     context={
-        'fotos': fotos,
+        'fotos': Fotos.objects.filter(obra=obra.obra.id),
         'obra': obra
     }
     return render(request, 'fiscalizacao/listar_fotos_obra.html', context)
+
+@login_required
+def visualizar_foto_obra(request, id, url):
+    print(id, url)
+    obra=Contrato.objects.get(id=id)     
+    if request.method=='POST':
+        try:
+            file_name=url
+            files=[]               
+            for item in request.FILES:                        
+                files.append(request.FILES[item])                                   
+            for file in files:                  
+                os.remove(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/'+str(file_name))
+                path = default_storage.save(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+"/"+str(file_name), ContentFile(file.read()))                        
+        except Exception as E:
+            print(E)
+    context={
+        'foto_url': url,
+        'obra': obra
+    }
+    return render(request, 'fiscalizacao/listar_foto_obra.html', context)
+
+@login_required
+def arquivar_foto_obra(request, id, url):    
+    obra=Contrato.objects.get(id=id)     
+    success='nops'
+    if request.method=='POST':        
+        try:            
+            file_name=url              
+            try:
+                import shutil
+                from datetime import date
+                today = date.today()
+                shutil.move(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/'+url, str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/arquivado/'+str(today.strftime("%m-%Y"))+'/'+url)                                
+                success=True
+            except:
+                try:                
+                    os.mkdir(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/arquivado/'+str(today.strftime("%m-%Y")))                 
+                    shutil.move(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/'+url, str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/arquivado/'+str(today.strftime("%m-%Y"))+'/'+url)                
+                    # os.remove(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/'+str(url))
+                    success=True
+                except:
+                    try:
+                        os.mkdir(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/arquivado')                 
+                        os.mkdir(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/arquivado/'+str(today.strftime("%m-%Y")))
+                        shutil.move(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/'+url, str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/arquivado/'+str(today.strftime("%m-%Y"))+'/'+url)                
+                        # os.remove(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/'+str(url))
+                        success=True
+                    except Exception as E:
+                        print('ops')
+                        success=False                         
+        except Exception as E:
+            print(E)
+            success=False    
+    if success==True:
+        foto=Fotos.objects.get(obra=obra.obra, url=url)
+        foto.delete()                          
+
+    context={
+        'foto_url': url,        
+        'obra': obra,
+        'success': success
+    }
+    return render(request, 'fiscalizacao/listar_foto_obra_apagar.html', context)
+
 
 @login_required
 def gerar_qr_code(request, obra_id):

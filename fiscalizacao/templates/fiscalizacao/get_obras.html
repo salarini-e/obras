@@ -13,7 +13,8 @@
             <th scope="col">Empresa</th>                          
             <th>Objeto da Obra</th>
             <th>Valor Previsto</th>
-            <th>Fiscal Responsável</th>          
+            <th>Fiscal Responsável</th> 
+            <th>Status</th>         
             <th></th>
         </tr>
       </thead>
@@ -30,6 +31,7 @@
             <td>{{contrato.obra.objeto_da_obra}}</td>                            
             <td>{{contrato.obra.valor_previsto}}</td>
             <td>{{contrato.obra.fiscal.all.0}}</td>            
+            <td>{{contrato.obra.status}}</td>  
             <td>
                 <a href="{% url 'obra:gerar_qrcode' contrato.obra.id %}" target="_blank">
                     <i class="fas fa-qrcode"></i>

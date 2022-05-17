@@ -8,7 +8,8 @@ class Form_Obras(ModelForm):
     class Meta:
         model = Obra
         widgets = {'cadastrado_por': forms.HiddenInput(),                   
-                   'valor_previsto': forms.TextInput(attrs={'onkeydown':"maskValor(this)"})}
+                   'valor_previsto': forms.TextInput(attrs={'onkeydown':"maskValor(this)"}),
+                   'status': forms.Select(attrs={'class':'form-select mb-3'}),}        
         exclude = ['dt_inclusao']
 
 class Form_Fiscal(ModelForm): 
@@ -34,7 +35,8 @@ class Form_Empresa(ModelForm):
 class Form_Nota(ModelForm): 
     class Meta:
         model = Nota_Fiscal
-        widgets = {'valor': forms.TextInput(attrs={'onkeydown':"maskValor(this)"})}
+        widgets = {'valor': forms.TextInput(attrs={'onkeydown':"maskValor(this)"}),
+        'tipo_periodo': forms.Select(attrs={'class':'form-select mb-3'}),}        
         exclude = ['dt_inclusao']
 
 
