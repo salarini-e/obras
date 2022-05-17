@@ -105,7 +105,7 @@ def cadastrar_obra(request):
                     nota=form_nota.save()
                     contrato=Contrato(obra=obra, empresa=empresa, nota_fiscal=nota)
                     contrato.save()
-                    os.mkdir(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(contrato.id))
+                    os.mkdir(str(BASE_DIR)+'/settings/static/fotos/'+str(contrato.id))
                     error=False
                 except Exception as E:
                     error=str(E)
@@ -268,7 +268,7 @@ def visualizar_fotos_obra(request, id):
         files=[]               
         for item in request.FILES:                        
             files.append(request.FILES[item])                   
-        lista=os.listdir(os.path.join(BASE_DIR, 'fiscalizacao/static')+'/fotos/'+str(id))
+        lista=os.listdir(os.path.join(BASE_DIR, 'settings/static')+'/fotos/'+str(id))
         try:
             lista.remove('arquivado')
         except:
@@ -285,7 +285,7 @@ def visualizar_fotos_obra(request, id):
                 file_name='0'+str(count)
             else:
                 file_name=str(count)
-            path = default_storage.save(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+id+"/"+str(file_name)+".jpg", ContentFile(file.read()))                        
+            path = default_storage.save(str(BASE_DIR)+'/settings/static/fotos/'+id+"/"+str(file_name)+".jpg", ContentFile(file.read()))                        
     context={
         'fotos': Fotos.objects.filter(obra=obra.obra.id),
         'obra': obra
@@ -303,8 +303,8 @@ def visualizar_foto_obra(request, id, url):
             for item in request.FILES:                        
                 files.append(request.FILES[item])                                   
             for file in files:                  
-                os.remove(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/'+str(file_name))
-                path = default_storage.save(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+"/"+str(file_name), ContentFile(file.read()))                        
+                os.remove(str(BASE_DIR)+'/settings/static/fotos/'+str(id)+'/'+str(file_name))
+                path = default_storage.save(str(BASE_DIR)+'/settings/static/fotos/'+str(id)+"/"+str(file_name), ContentFile(file.read()))                        
         except Exception as E:
             print(E)
     context={
@@ -324,20 +324,20 @@ def arquivar_foto_obra(request, id, url):
                 import shutil
                 from datetime import date
                 today = date.today()
-                shutil.move(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/'+url, str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/arquivado/'+str(today.strftime("%m-%Y"))+'/'+url)                                
+                shutil.move(str(BASE_DIR)+'/settings/static/fotos/'+str(id)+'/'+url, str(BASE_DIR)+'/settings/static/fotos/'+str(id)+'/arquivado/'+str(today.strftime("%m-%Y"))+'/'+url)                                
                 success=True
             except:
                 try:                
-                    os.mkdir(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/arquivado/'+str(today.strftime("%m-%Y")))                 
-                    shutil.move(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/'+url, str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/arquivado/'+str(today.strftime("%m-%Y"))+'/'+url)                
-                    # os.remove(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/'+str(url))
+                    os.mkdir(str(BASE_DIR)+'/settings/static/fotos/'+str(id)+'/arquivado/'+str(today.strftime("%m-%Y")))                 
+                    shutil.move(str(BASE_DIR)+'/settings/static/fotos/'+str(id)+'/'+url, str(BASE_DIR)+'/settings/static/fotos/'+str(id)+'/arquivado/'+str(today.strftime("%m-%Y"))+'/'+url)                
+                    # os.remove(str(BASE_DIR)+'/settings/static/fotos/'+str(id)+'/'+str(url))
                     success=True
                 except:
                     try:
-                        os.mkdir(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/arquivado')                 
-                        os.mkdir(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/arquivado/'+str(today.strftime("%m-%Y")))
-                        shutil.move(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/'+url, str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/arquivado/'+str(today.strftime("%m-%Y"))+'/'+url)                
-                        # os.remove(str(BASE_DIR)+'/fiscalizacao/static/fotos/'+str(id)+'/'+str(url))
+                        os.mkdir(str(BASE_DIR)+'/settings/static/fotos/'+str(id)+'/arquivado')                 
+                        os.mkdir(str(BASE_DIR)+'/settings/static/fotos/'+str(id)+'/arquivado/'+str(today.strftime("%m-%Y")))
+                        shutil.move(str(BASE_DIR)+'/settings/static/fotos/'+str(id)+'/'+url, str(BASE_DIR)+'/settings/static/fotos/'+str(id)+'/arquivado/'+str(today.strftime("%m-%Y"))+'/'+url)                
+                        # os.remove(str(BASE_DIR)+'/settings/static/fotos/'+str(id)+'/'+str(url))
                         success=True
                     except Exception as E:
                         print('ops')
