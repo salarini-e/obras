@@ -62,7 +62,7 @@ class Nota_Fiscal(models.Model):
     
     n_nota=models.IntegerField(verbose_name='N. da nota')
     data=models.DateField(verbose_name='Data de expedição')
-    valor=models.CharField(max_length=20,verbose_name='Valor da nota')
+    valor=models.CharField(max_length=20,verbose_name='Valor da nota (R$)')
     tipo_periodo=models.CharField(max_length=1, choices=PERIODO_CHOICES, default='a', verbose_name='Tipo de Período')
     periodo=models.CharField( max_length=5,verbose_name='Período')
     url=models.CharField(max_length=300, default='#', verbose_name='Link da nota')
@@ -94,7 +94,7 @@ class Obra(models.Model):
 
     objeto_da_obra=models.CharField(max_length=150, verbose_name='Objeto da obra')
     populacao_atendida=models.CharField(max_length=150, verbose_name='População atendida')
-    valor_previsto=models.CharField(max_length=20, verbose_name='Valor previsto')
+    valor_previsto=models.CharField(max_length=20, verbose_name='Valor previsto (R$)')
     status=models.ForeignKey(Status, on_delete=models.PROTECT, verbose_name='Situação')    
     fiscal=models.ManyToManyField(Fiscal, through='Obra_Fiscal')
     justificativa=models.TextField(verbose_name='Justificativa')

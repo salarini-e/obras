@@ -59,6 +59,7 @@
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 <script>
     function searchEmpresa(e){        
         if (3<=String(e.value).length){            
@@ -81,6 +82,10 @@
         document.getElementById('search_empresa').value=e.value
         document.getElementById('searchResult').innerHTML=''
     }
+    function maskValor(input){    
+        $(input).mask('#.##0.000,00', {reverse: true});
+    }
+    
     // document.getElementById('nota_fiscal').style.display='none';
     // document.getElementById('obra').style.display='none';
     // function exibirFormNota(){

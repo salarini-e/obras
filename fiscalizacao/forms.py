@@ -7,7 +7,8 @@ from django.forms import ModelForm, ValidationError
 class Form_Obras(ModelForm): 
     class Meta:
         model = Obra
-        widgets = {'cadastrado_por': forms.HiddenInput()}
+        widgets = {'cadastrado_por': forms.HiddenInput(),                   
+                   'valor_previsto': forms.TextInput(attrs={'onkeydown':"maskValor(this)"})}
         exclude = ['dt_inclusao']
 
 class Form_Fiscal(ModelForm): 
@@ -33,14 +34,11 @@ class Form_Empresa(ModelForm):
 class Form_Nota(ModelForm): 
     class Meta:
         model = Nota_Fiscal
+        widgets = {'valor': forms.TextInput(attrs={'onkeydown':"maskValor(this)"})}
         exclude = ['dt_inclusao']
 
-class Form_Nota(ModelForm): 
-    class Meta:
-        model = Nota_Fiscal
-        exclude = ['dt_inclusao']
 
 class Form_Contrato(ModelForm): 
     class Meta:
-        model = Contrato
+        model = Contrato        
         exclude = ['dt_inclusao']
