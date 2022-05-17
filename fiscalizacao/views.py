@@ -277,7 +277,10 @@ def visualizar_fotos_obra(request, id):
         if count>0:
             foto=Fotos(obra=Obra.objects.get(id=id), url="")
             foto.save()
-            foto.url=str(foto.id)+'.jpg'            
+            if foto.id<10:
+                foto.url='0'+str(foto.id)+'.jpg'            
+            else:
+                foto.url=str(foto.id)+'.jpg'            
             foto.save()
             count=int(foto.id)
         for file in files:  
