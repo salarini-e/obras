@@ -36,7 +36,7 @@ class Form_Nota(ModelForm):
     class Meta:
         model = Nota_Fiscal
         widgets = {'valor': forms.TextInput(attrs={'onkeydown':"maskValor(this)"}),
-        'tipo_periodo': forms.Select(attrs={'class':'form-select mb-3'}),}        
+                   'tipo_periodo': forms.Select(attrs={'class':'form-select mb-3'}),}        
         exclude = ['dt_inclusao']
 
 

@@ -33,7 +33,7 @@
             <td>{{contrato.obra.fiscal.all.0}}</td>            
             <td>{{contrato.obra.status}}</td>  
             <td>
-                <a href="{% url 'obra:gerar_qrcode' contrato.obra.id %}" target="_blank">
+                <a href="{% url 'obra:gerar_qrcode' contrato.obra.id %}">
                     <i class="fas fa-qrcode"></i>
                 </a>
             </td>
