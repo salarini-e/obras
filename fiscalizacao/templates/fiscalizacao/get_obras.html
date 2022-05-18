@@ -29,7 +29,7 @@
             <th  scope="row">{{ contrato.id }}</th>                            
             <td>{{contrato.empresa.nome}}</td>                            
             <td>{{contrato.obra.objeto_da_obra}}</td>                            
-            <td>{{contrato.obra.valor_previsto}}</td>
+            <td>R$ <span class="valor">{{contrato.obra.valor_previsto}}</span></td>
             <td>{{contrato.obra.fiscal.all.0}}</td>            
             <td>{{contrato.obra.status}}</td>  
             <td>
@@ -39,5 +39,15 @@
             </td>
         </tr>    
         {% endfor %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                valores=document.getElementsByClassName('valor')                
+                for(i in valores){
+                    valores[i].innerText=parseInt(valores[i].innerText).toLocaleString('pt-br', {minimumFractionDigits: 2})
+                }
+            });
+        </script>
       </tbody>
 </table>

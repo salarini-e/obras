@@ -50,7 +50,7 @@
                                                 </thead>
                                                 <tbody>                                                    
                                                     <td>{{nota.data}}</td>
-                                                    <td>{{nota.valor}}</td>
+                                                    <td>R$ <span class="valor">{{nota.valor}}</span></td>
                                                     <td>{{nota.periodo}} ({{nota.get_tipo_periodo_display}})</td>                                                    
                                                 </tbody>
                                             </table>                                                                                              
@@ -107,5 +107,11 @@ font-weight: bold;
     function maskValor(input){    
         $(input).mask('#.##0.000,00', {reverse: true});
     }
+    $(document).ready(function(){
+        valores=document.getElementsByClassName('valor')                
+        for(i in valores){
+            valores[i].innerText=parseInt(valores[i].innerText).toLocaleString('pt-br', {minimumFractionDigits: 2})
+        }
+    });
 </script>
 {% endblock %}

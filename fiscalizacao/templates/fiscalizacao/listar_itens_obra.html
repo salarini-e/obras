@@ -51,11 +51,11 @@
                                 </td>
                                 <td colspan="2">
                                     <b>Valor previsto:</b><br>
-                                    <span>{{obra.obra.valor_previsto}}</span>
+                                    R$ <span id="valorp">{{obra.obra.valor_previsto}}</span>
                                 </td>
                                 <td colspan="2">
                                     <b>Valor em nota:</b><br>
-                                    <span>{{obra.nota_fiscal.valor}}</span>
+                                    R$ <span id="valorn">R$ {{obra.nota_fiscal.valor}}</span>
                                 </td>           
                             </tr>    
                             <tr>                   
@@ -63,7 +63,7 @@
                                 <td><button class="btn btn-primary">Notas</button></td>   -->
                                 <td colspan="2" class="px-3">
                                     <b>CNPJ da empresa:</b><br>                      
-                                    <span class="cnpj">{{obra.empresa.cnpj}}</span>
+                                    <span id="cnpj">{{obra.empresa.cnpj}}</span>
                                 </td>         
                                 <td colspan="2">
                                     <b>População atendida:</b><br>
@@ -71,11 +71,11 @@
                                 </td>
                                 <td colspan="2" class="px-3">
                                     <b>Fiscal Responsável:</b><br>                      
-                                    <span class="cnpj">{{obra.obra.fiscal.all.0}}</span>
+                                    <span>{{obra.obra.fiscal.all.0}}</span>
                                 </td>  
                                 <td colspan="2" class="px-3">
                                     <b>Status:</b><br>                      
-                                    <span class="cnpj">{{obra.obra.status}}</span>
+                                    <span>{{obra.obra.status}}</span>
                                 </td>  
                                  
                             </tr>   
@@ -116,6 +116,7 @@ font-weight: bold;
 }
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 <script>
 function search(input){    
 getObra(input.value)
@@ -133,5 +134,9 @@ $.ajax({
     }
 });                
 };
+
+$("#valorn").mask('#.##0.000,00', {reverse: true});
+$("#valorp").mask('#.##0.000,00', {reverse: true});
+$("#cnpj").mask("99.999.999/9999-99");
 </script>
 {% endblock %}

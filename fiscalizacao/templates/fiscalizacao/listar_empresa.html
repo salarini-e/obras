@@ -40,8 +40,23 @@
         </div>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
-    
+    function icnpj(v){
+        v=v.replace(/\D/g,"")                    //Remove tudo o que nao e digito
+        v=v.replace(/(\d{2})(\d)/,"$1.$2")       //Coloca um ponto entre o segundo e terceiro digitos
+        v=v.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o quinto e o sexto digitos
+        v=v.replace(/(\d{3})(\d)/,"$1/$2")       //Coloca um ponto entre o quinto e o sexto digitos
+        v=v.replace(/(\d{4})(\d)/,"$1-$2")       //Coloca um ponto entre o quinto e o sexto digitos
+        // v=v.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5")
+        return v
+    }
+    $(document).ready(function(){
+        valores=document.getElementsByClassName('cnpj')                
+        for(i in valores){
+            valores[i].innerText=icnpj(valores[i].innerText)
+        }
+    });
 </script>
 
 {% endblock %}
