@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load widget_tweaks %}  
+{% block main %}
+<div class="row">    
+    <div class="col container p-5">
+        <div class="row">
+            <div class="col">
+                <h1>DADOS DA OBRA - NOTAS</h1>
+            </div>
+            <div class="col d-flex" style="position: relative;">    
+                <a class="btn btn-primary my-auto ms-auto" href="{% url 'obra:visualizar_obra' obra.id %}">
+                    Voltar
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-4" id="searchResult">   
+                <div class="p-3">
+                    <div class="mb-2" style="background-color: #d6e7f8;">
+                        <div class="py-3 px-3">                        
+                            <div class="d-flex ps-4">
+                                <span class="my-auto"><b>id: </b>{{obra.id}}</span>
+                                <span class="ms-auto">
+                                    <!-- <button class="btn btn-outline-danger me-2">Arquivar todas as fotos</button> -->
+                                    <!-- <button class="btn btn-success">Notas</button> -->
+                                </span>
+                            </div>
+                        </div>
+                    </div>                
+                    <div class="row">
+                        <div class="col">
+                            <table class="table table-light table-striped mt-0">                                   
+                                <tbody>    
+                                    {% for nota in notas %}                    
+                                    <tr>                   
+                                        <td class="px-0 py-0 d-flex flex-column">
+                                            <div class="row px-3 pt-3">
+                                                <div class="col d-flex px-3">                                                    
+                                                    <span><b>N. Nota:</b> {{nota.n_nota}}</span>
+                                                    <span class="ms-auto"><b>id:</b> {{nota.id}}</span>
+                                                </div>
+                                            </div>                                            
+                                            <table class="my-4 mx-3">
+                                                <thead>                                                    
+                                                    <th>Data de Expedição:</th>
+                                                    <th>Valor:</th>
+                                                    <th>Período:</th>                                                    
+                                                </thead>
+                                                <tbody>                                                    
+                                                    <td>{{nota.data}}</td>
+                                                    <td>{{nota.valor}}</td>
+                                                    <td>{{nota.periodo}} ({{nota.get_tipo_periodo_display}})</td>                                                    
+                                                </tbody>
+                                            </table>                                                                                              
+                                            <div class="row">
+                                                <div class="col px-4 pb-2">
+                                                    <span><b>Data de inclusão:</b> {{nota.dt_inclusao}}</span>
+                                                </div>
+                                            </div>                                    
+                                           <a href="#" class="btn btn-info w-100 mt-2">
+                                               <b class="text-white">Editar</b>
+                                           </a>
+                                        </td>                                                 
+                                    </tr>                                         
+                                   {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col d-flex">
+                            <div class="pb-5 mx-auto">
+                                <h1 class="pt-4">CADASTRAR NOTA</h1>
+                                <form method="post" class="form col">            
+                                    {% csrf_token %}
+                                    <div id="nota_fiscal" class="mt-4">
+                                        {% for f_nota in form %}
+                                        {% if f_nota.label == 'Data de expedição' %}
+                                        <label for="">{{f_nota.label}}:</label>
+                                        {{f_nota|add_class:'form-control mb-3'|attr:'type:date'}}  
+                                        {% else %}
+                                        <label for="">{{f_nota.label}}:</label>
+                                        {{f_nota|add_class:'form-control mb-3'|attr:'type:text'|attr:'autocomplete:off'}}            
+                                        {% endif %}
+                                        {% endfor %}                                
+                                    </div>    
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>      
+    </div>
+</div>
+<style>
+.form-control:disabled, .form-control[readonly]{               
+font-weight: bold;
+}
+label{
+font-weight: bold;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+<script>
+    function maskValor(input){    
+        $(input).mask('#.##0.000,00', {reverse: true});
+    }
+</script>
+{% endblock %}

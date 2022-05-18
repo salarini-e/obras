@@ -359,7 +359,16 @@ def arquivar_foto_obra(request, id, url):
     }
     return render(request, 'fiscalizacao/listar_foto_obra_apagar.html', context)
 
-
+@login_required
+def visualizar_notas(request, id):
+    notas=Nota_Fiscal.objects.filter(id=id).order_by('dt_inclusao')
+    form=Form_Nota()
+    context={
+        'obra': {'id': id},
+        'notas':notas,
+        'form': form
+    }
+    return render(request, 'fiscalizacao/listar_notas_obra.html', context)
 @login_required
 def gerar_qr_code(request, obra_id):
     conteudo = f'''localhost:8000/gerar-qr-code/{obra_id}'''

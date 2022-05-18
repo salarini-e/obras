@@ -21,7 +21,7 @@ urlpatterns = [
     path('dados-obras/v/<id>/fotos', views.visualizar_fotos_obra, name='visualizar_fotos_obra' ),
     path('dados-obras/v/<id>/fotos/<url>', views.visualizar_foto_obra, name='visualizar_foto_obra' ),
     path('dados-obras/v/<id>/fotos/<url>/arquivar', views.arquivar_foto_obra, name='arquivar_foto_obra' ),
-
+    path('dados-obras/v/<id>/notas', views.visualizar_notas, name='visualizar_notas' ),
     path('cadastrar-empresa/', views.cadastrar_empresa, name='cadastrar_empresa' ),
     path('listar-empresa/', views.listar_empresa, name='listar_empresa' ),
     
