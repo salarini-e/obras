@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load widget_tweaks %}  
+{% block main %}
+
+<div class="row">    
+    <div class="col container p-5">
+        <div class="row">
+            <div class="col">
+                <h1>DADOS DA EMPRESA</h1>
+            </div>
+            <div class="col d-flex" style="position: relative;">                    
+                <a class="btn btn-primary my-auto ms-auto" href="{% url 'obra:editar_empresa' empresa.id %}">
+                    <i class="fas fa-pencil-alt me-2"></i> Editar
+                </a>
+                <a class="btn btn-primary my-auto ms-1" href="{% url 'obra:listar_empresa' %}">
+                    Voltar
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-4" id="searchResult">   
+                <div class="p-3">
+                    <div class="mb-2" style="background-color: #d6e7f8;">
+                        <div class="py-3 px-3">                        
+                            <div class="d-flex ps-4">
+                                <span class="my-auto"><b>id: </b>{{empresa.id}}</span>
+                            </div>
+                        </div>
+                    </div>                
+                    <table class="table table-light table-striped mt-0">                                   
+                        <tbody>                        
+                            <tr>                   
+                                <td colspan="2" class="px-3">
+                                    <b>Empresa:</b><br>
+                                    <span>{{empresa.nome}}</span>
+                                </td>   
+                                <td colspan="2" class="px-3">
+                                    <b>CNPJ:</b><br>
+                                    <span id="cnpj">{{empresa.cnpj}}</span>
+                                </td>                                          
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>      
+    </div>
+</div>
+<style>
+.form-control:disabled, .form-control[readonly]{               
+font-weight: bold;
+}
+label{
+font-weight: bold;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+<script>
+$("#valorn").mask('#.##0.000,00', {reverse: true});
+$("#valorp").mask('#.##0.000,00', {reverse: true});
+$("#cnpj").mask("99.999.999/9999-99");
+</script>
+{% endblock %}

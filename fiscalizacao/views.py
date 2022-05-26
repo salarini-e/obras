@@ -1,12 +1,15 @@
+from textwrap import indent
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from .forms import Form_Contrato, Form_Fiscal, Form_Nota, Form_Obras, Form_Empresa
+from .forms import Form_Contrato, Form_Fiscal, Form_Nota, Form_Empenho, Form_Obras, Form_Empresa
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from settings.settings import BASE_DIR
 import os
+
+from .functions import get_client_ip
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -15,9 +18,20 @@ def index(request):
 def cadastrar_empresa(request): 
     if request.method=='POST':  
         form=Form_Empresa(request.POST)   
-        print(form)           
+        # print(form)           
         if form.is_valid():
-            form.save()            
+            empresa=form.save()             
+            acao={''}
+            log=Log(
+                    tabela='Empresa',
+                    ref=empresa.id,
+                    tipo='c', 
+                    acao=acao,
+                    user=request.user, 
+                    ipv4=get_client_ip(request)
+                )
+            log.save()
+            print(empresa.id)
             context={
                 'form': Form_Empresa(initial={'cadastrado_por':request.user}),
                 'success': 'Empresa cadastrada com sucesso!'
@@ -25,7 +39,78 @@ def cadastrar_empresa(request):
             return render(request, 'fiscalizacao/cadastrar_empresa.html', context) 
     else:
         form=Form_Empresa(initial={'cadastrado_por':request.user})
-    print(form)           
+    # print(form)           
+    context={
+            'form': form,
+    }
+    return render(request, 'fiscalizacao/cadastrar_empresa.html', context)
+
+@login_required
+def historico_empresa(request): 
+    context={
+        'logs': Log.objects.filter(tabela='emp')
+    }
+    return render(request, 'fiscalizacao/historico_empresa.html', context)
+
+def historico_empresa_acoes(request, id): 
+    log=Log.objects.get(id=id)
+    import json
+    json_=json.loads(str(log.acao.replace("'",'"')))
+    #aqui
+    context={
+        'log': log,
+        'acoes': json_.items()
+    }
+    return render(request, 'fiscalizacao/historico_empresa_acoes.html', context)
+
+@login_required
+def visualizar_empresa(request, id): 
+    context={
+        'empresa': Empresa.objects.get(id=id)
+    }
+    return render(request, 'fiscalizacao/listar_itens_empresa.html', context)
+
+@login_required
+def editar_empresa(request, id): 
+    empresa=Empresa.objects.get(id=id)
+    form=Form_Empresa(instance=empresa)
+    if request.method=='POST':  
+        form_=Form_Empresa(request.POST, instance=empresa)           
+        if form_.is_valid():
+            acoes={}
+            for i in form_:      
+                if i.name!='cadastrado_por':    
+                    if form[i.name].value()!=form_.cleaned_data[i.name]:
+                        # print(i.name)                    
+                        acoes[i.name]={
+                            'antes': form[i.name].value(),
+                            'depois': form_.cleaned_data[i.name]
+                        }
+                else:
+                    if form[i.name].value()!=form_.cleaned_data[i.name].id:
+                        acoes[i.name]={
+                            'antes': form[i.name].value(),
+                            'depois': form_.cleaned_data[i.name].id
+                        }
+            # print(acoes)              
+            empresa=form_.save()                         
+            log=Log(
+                    tabela='Empresa',
+                    ref=empresa.id,
+                    tipo='u', 
+                    acao=acoes,
+                    user=request.user, 
+                    ipv4=get_client_ip(request)
+                )
+            log.save()            
+            context={
+                'form': form_,
+                'success': 'Cadastrada da empresa atualizado com sucesso!'
+            }
+            return render(request, 'fiscalizacao/cadastrar_empresa.html', context) 
+        else:
+            form=form_      
+    
     context={
             'form': form,
     }
@@ -40,7 +125,7 @@ def cadastrar_fiscal(request):
             form.save()            
             context={
                 'form': Form_Fiscal(initial={'cadastrado_por':request.user}),
-                'success': 'Empresa cadastrada com sucesso!'
+                'success': 'Fiscal cadastrado com sucesso!'
             }
             return render(request, 'fiscalizacao/cadastrar_fiscais.html', context) 
     else:
@@ -89,7 +174,7 @@ def get_empresa(request):
 @login_required
 def cadastrar_obra(request):    
     if request.method=='POST':          
-        form_nota=Form_Nota(request.POST)
+        form_nota=Form_Empenho(request.POST)
         form_obra=Form_Obras(request.POST)
         try:
             empresa=Empresa.objects.get(nome=request.POST['empresa'])    
@@ -112,7 +197,7 @@ def cadastrar_obra(request):
                     print(E)
                 context={      
                     'error': error,               
-                    'form_nota': Form_Nota(),
+                    'form_nota': Form_Empenho(),
                     'form_obra': Form_Obras(),
                     'success': 'Obracadastrada com sucesso!'
                 }
@@ -122,7 +207,7 @@ def cadastrar_obra(request):
 
     else:
         error=False
-        form_nota=Form_Nota()
+        form_nota=Form_Empenho()
         form_obra=Form_Obras(initial={'cadastrado_por':request.user})    
 
     context={

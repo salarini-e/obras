@@ -13,25 +13,39 @@
 <div class="row">    
     <div class="col container p-5">
         <div class="d-flex">
-            <h1 class="text-uppercase">Empresas</h1>            
+            <h1 class="text-uppercase">Historico de Registro de Empresas</h1>            
             <span class="ms-auto"><a class="btn btn-primary" href="{% url 'obra:cadastrar_empresa' %}">Cadastrar Empresa</a></span>
         </div>
         <div class="d-flex pt-4">
-            <div class="col-9 mx-auto">
+            <div class="col-12 mx-auto">
                 <table class="table table-light table-striped table-hover text-center">
                     <thead>
                         <tr>
-                          <th scope="col">id</th>
-                          <th scope="col">Empresa</th>
-                          <th>CNPJ</th>
+                          <th scope="col">Tipo de Ação</th>
+                          <th scope="col">Id da Empresa</th>                          
+                          <th>Usuário</th>
+                          <th>Data</th>
+                          <th>IP</th>
+                          <th>Ações</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {% for empresa in empresas %}
-                        <tr onclick="window.open('{% url 'obra:visualizar_empresa' empresa.id %}', '_self')">
-                          <th  scope="row">{{empresa.id}}</th>
-                          <td>{{empresa.nome}}</td>
-                          <td class="cnpj">{{empresa.cnpj}}</td>
+                        {% for log in logs %}
+                        <tr>                          
+                          <td>{{log.get_tipo_display}}</td>                          
+                          <td><a href="{% url 'obra:visualizar_empresa' log.ref %}">{{log.ref}}</a></td>                          
+                          <td>{{log.user}}</td>
+                          <td>{{log.dt_inclusao}}</td>
+                          <td>{{log.ipv4}}</td>
+                          <td class="acao">                              
+                                {% if log.tipo == 'c' %}
+                                <i class="fas fa-eye-slash"></i>
+                                {% else %}
+                                <a href="{% url 'obra:historico_empresa_acoes' log.id %}">                                    
+                                    <i class="fas fa-eye"></i>
+                                </a>                                    
+                                {% endif %}                                
+                            </td>
                         </tr>           
                         {% endfor %}         
                       </tbody>
@@ -56,11 +70,14 @@
         for(i in valores){
             valores[i].innerText=icnpj(valores[i].innerText)
         }
-    });
+    });    
 </script>
 <style>
     tbody td:hover{
-        cursor: pointer;
+        cursor: po;
+    }
+    a{
+        text-decoration: none;
     }
 </style>
 

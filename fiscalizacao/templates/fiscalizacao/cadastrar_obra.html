@@ -25,7 +25,8 @@
         <form method="post" class="form col-5">            
             {% csrf_token %}
             <br>
-            <div id="contrato">                
+            <h4 class="text-uppercase">Dados do contrato</h4>
+            <div id="contrato" class="pb-3">                
                 <label for="">Empresa contratada:</label>
                 <input name="empresa" id="search_empresa" onkeyup="searchEmpresa(this)" type="text" class="form-control" autocomplete="off">                
                 <span id="searchResult"></span> 
@@ -33,7 +34,7 @@
                 <br>{{error}}
                 {% endif %}
             </div>           
-            <div id="nota_fiscal" class="mt-4">
+            <div class="nota_fiscal" class="mt-4">
                 {% for f_nota in form_nota %}
                 {% if f_nota.label == 'Data de expedição' %}
                 <label for="">{{f_nota.label}}:</label>
@@ -44,7 +45,8 @@
                 {% endif %}
                 {% endfor %}                                
             </div>
-            <div id="obra" class="mt-4">
+            <h4 class="text-uppercase mt-5">Dados da obra</h4>
+            <div id="obra" class="mt-2">
                 {% for f_obra in form_obra %}
                 {% if f_obra.name != 'cadastrado_por' %}
                 <label for="">{{f_obra.label}}:</label>

@@ -3,9 +3,9 @@
         <div id="mnavbar">
             <a href="/" class="btn"><i class="fas fa-home me-2"></i>Página Inicial</a>  
             {% if request.user.is_staff %}                  
-            <a href="{% url 'obra:cadastrar_fiscal' %}" class="btn ms-5">Fiscais</a>              
-            <a href="{% url 'obra:cadastrar_empresa' %}" class="btn ms-5">Empresas</a>              
-            <a href="{% url 'obra:cadastrar' %}" class="btn ms-5">Obras</a>              
+            <a href="{% url 'obra:listar_fiscais' %}" class="btn ms-5">Fiscais</a>              
+            <a href="{% url 'obra:listar_empresa' %}" class="btn ms-5">Empresas</a>              
+            <a href="{% url 'obra:visualizar' 'buscar' %}" class="btn ms-5">Obras</a>              
             <!-- <a href="{% url 'obra:teste' %}" class="btn ms-4">Pag. de Testes</a>               -->
             
             <!-- <div class="btn-group ms-3">
