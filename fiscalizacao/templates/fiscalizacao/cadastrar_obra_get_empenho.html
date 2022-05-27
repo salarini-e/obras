@@ -1,0 +1,12 @@
+{% if fail %}
+
+{{nota}}
+
+{% else %}
+<tr>
+    <td>{{nota.n_nota}}</td>
+    <td>{{nota.valor}}</td>
+    <td>{{nota.periodo}} ({{nota.tipo_periodo}})</td>
+    <th><button onclick="(this)=>{console.log(this.target.id)}" id="{{nota.n_nota}}" type="button" class="btn">X</button></th>
+</tr>
+{% endif %}

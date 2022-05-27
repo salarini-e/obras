@@ -9,37 +9,71 @@
             <div class="col">
                 <h1>DADOS DA EXECUÇÃO DA OBRA</h1>
             </div>
-            <div class="col d-flex" style="position: relative;">    
-                <a class="btn btn-primary my-auto ms-auto" href="{% url 'obra:visualizar_obra' obra.id %}">
+            <div class="col d-flex" style="position: relative;"> 
+                <a href="{% url 'obra:cadastrar_empenho' obra.id %}" type="button" class="btn btn-primary my-auto ms-auto">
+                    <i class="fas fa-plus-circle me-2"></i>
+                    Novo Empenho
+                </a>
+                <a class="btn btn-primary my-auto ms-2" href="{% url 'obra:visualizar_obra' obra.id %}">
                     Voltar
                 </a>
             </div>
         </div>
         <div class="row">
-            <div class="col pt-4" id="searchResult">   
+            <div class="col pt-4">
+                <b class="mx-3">Progresso da obra:</b>
+                <div class="progress mx-3">                                
+                    <div class="progress-bar" role="progressbar" style="width: {{progresso}}%;" aria-valuenow="{{progresso}}" aria-valuemin="0" aria-valuemax="100">{{progresso}}%</div>
+                  </div>
+            </div>
+        </div> 
+        <div class="row">
+            <div class="col" id="searchResult">                   
                 <div class="p-3">
                     <div class="mb-2" style="background-color: #d6e7f8;">
                         <div class="py-3 px-3">                        
                             <div class="d-flex ps-4">
                                 <span class="my-auto"><b>id: </b>{{obra.id}}</span>
                                 <span class="ms-auto">
-                                    <!-- <button class="btn btn-outline-danger me-2">Arquivar todas as fotos</button> -->
+                                    <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
+                                        <i class="fas fa-plus-circle me-2"></i>
+                                        Nova Medição
+                                    </button>
+                                    <button onclick="exibirNotas('all', '{{obra.id}}')" class="btn btn-outline-primary me-2">
+                                        <i class="far fa-eye me-2"></i>
+                                        Todas Medições
+                                    </button>
                                     <!-- <button class="btn btn-success">Notas</button> -->
                                 </span>
                             </div>
                         </div>
-                    </div>                
+                    </div>      
+                                                 
                     <div class="row">
                         <div class="col">
+                            <div class="row">
+                                <div class="col pt-2">
+                                    <h5>NOTAS DE EMPENHOS: </h5>
+                                </div>
+                            </div>
                             <table class="table table-light table-striped mt-0">                                   
                                 <tbody>    
                                     {% for nota in notas %}                    
-                                    <tr>                   
-                                        <td class="px-0 py-0 d-flex flex-column">
-                                            <div class="row px-3 pt-3">
+                                    <tr class="pb-3">                   
+                                        <td class="px-0 py-0 d-flex flex-column" colspan="2">
+                                            <div class="row px-3">
                                                 <div class="col d-flex px-3">                                                    
-                                                    <span><b>N. Nota:</b> {{nota.n_nota}}</span>
-                                                    <span class="ms-auto"><b>id:</b> {{nota.id}}</span>
+                                                    <span class="d-flex mt-3">
+                                                        <b>N. EMPENHO:</b> 
+                                                        <span class="ms-2">{{nota.n_nota}}</span>
+                                                        <a class="btn p-0 ms-3 text-danger d-flex" style="margin-top: -3px;">
+                                                            <span>
+                                                                <i class="fas fa-trash"></i>
+                                                            </span>
+                                                            <span class="my-auto ms-1 pt-1"></span>  
+                                                        </a>
+                                                    </span>
+                                                    <span class="ms-auto mt-3"><b>id:</b> {{nota.id}}</span>
                                                 </div>
                                             </div>                                            
                                             <table class="my-4 mx-3">
@@ -55,37 +89,24 @@
                                                 </tbody>
                                             </table>                                                                                              
                                             <div class="row">
-                                                <div class="col px-4 pb-2">
+                                                <div class="col px-4 pb-2 d-flex">
                                                     <span><b>Data de inclusão:</b> {{nota.dt_inclusao}}</span>
+                                                    <a onclick="exibirNotas(false, '{{nota.id}}')" class="btn text-info p-0 ms-auto d-flex">                                                        
+                                                        <span class="pt-1">
+                                                            <i class="far fa-copy"></i>
+                                                        </span>
+                                                        <span class="my-auto ms-1 pt-1">Medições</span>                                               
+                                                    </a>
                                                 </div>
-                                            </div>                                    
-                                           <a href="#" class="btn btn-info w-100 mt-2">
-                                               <b class="text-white">Editar</b>
-                                           </a>
+                                            </div>                                                             
                                         </td>                                                 
                                     </tr>                                         
                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col d-flex">
-                            <div class="pb-5 mx-auto">
-                                <h1 class="pt-4">CADASTRAR MEDIÇÃO</h1>
-                                <form method="post" class="form col">            
-                                    {% csrf_token %}
-                                    <div id="nota_fiscal" class="mt-4">
-                                        {% for f_nota in form %}
-                                        {% if f_nota.label == 'Data de expedição' %}
-                                        <label for="">{{f_nota.label}}:</label>
-                                        {{f_nota|add_class:'form-control mb-3'|attr:'type:date'}}  
-                                        {% else %}
-                                        <label for="">{{f_nota.label}}:</label>
-                                        {{f_nota|add_class:'form-control mb-3'|attr:'type:text'|attr:'autocomplete:off'}}            
-                                        {% endif %}
-                                        {% endfor %}                                
-                                    </div>    
-                                </form>
-                            </div>
+                        <div  id="exibirNotasAqui" class="col">
+                           
                         </div>
                     </div>
                 </div>
@@ -93,13 +114,58 @@
         </div>      
     </div>
 </div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <form method="post" class="form col">            
+      <div class="modal-header">
+        <h2 class="pt-4">CADASTRAR MEDIÇÃO</h2>
+        <!-- <h5 class="modal-title" id="exampleModalLabel">New message</h5> -->
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-5">        
+        
+            {% csrf_token %}
+            <div id="nota_fiscal" class="mt-4">
+                {% for f_nota in form %}
+                {% if f_nota.label == 'Data de expedição fiscal' %}
+                <label for="">{{f_nota.label}}:</label>
+                {{f_nota|add_class:'form-control mb-3'|attr:'type:date'}} 
+
+                {% else %}
+                <label for="">{{f_nota.label}}:</label>
+                {{f_nota|add_class:'form-control mb-3'|attr:'type:text'|attr:'autocomplete:off'}}            
+                {% endif %}
+                <div class="mb-2">
+                    {{f_nota.errors}}
+                </div>
+                {% endfor %}                                
+            </div>    
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">FECHAR</button>
+        <button type="submit" class="btn btn-primary">CADASTRAR</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
 <style>
+    html, body{
+        width: 100%;
+        height: 100%;
+    }
 .form-control:disabled, .form-control[readonly]{               
 font-weight: bold;
 }
 label{
 font-weight: bold;
 }
+.show_nota{
+
+}
+
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
@@ -113,5 +179,19 @@ font-weight: bold;
             valores[i].innerText=parseInt(valores[i].innerText).toLocaleString('pt-br', {minimumFractionDigits: 2})
         }
     });
+    
+    function exibirNotas(filter, value){
+        var url = '/get_notas/';  // get the url of the `load_cities` view        
+        $.ajax({ 
+            url: url,
+            data: {
+                'filter': filter,
+                'id': value,
+            },
+            success: function(data) {                               
+                $("#exibirNotasAqui").html(data);
+            }
+        });                
+    };
 </script>
 {% endblock %}

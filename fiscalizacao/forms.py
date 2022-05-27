@@ -31,13 +31,9 @@ class Form_Empresa(ModelForm):
         exclude = ['dt_inclusao']
 
     def clean_cnpj(self):                
-        
-        # print('---',self.data.cnpj)
         cnpj = validate_CNPJ(self.cleaned_data["cnpj"])
         cnpj = cnpj.replace('.', '')
         cnpj = cnpj.replace('-', '')
-        # self.data['cnpj']=cnpj
-        # print('---', self.data.cnpj)
         return cnpj
 
 
@@ -47,7 +43,13 @@ class Form_Empenho(ModelForm):
         model = Nota_Empenho
         widgets = {'valor': forms.TextInput(attrs={'onkeydown':"maskValor(this)"}),
                    'tipo_periodo': forms.Select(attrs={'class':'form-select mb-3'}),}        
-        exclude = ['dt_inclusao']
+        exclude = ['ativo', 'dt_inclusao']
+
+    def clean_valor(self):                        
+        valor=self.cleaned_data["valor"]
+        valor = valor.replace('.', '')
+        valor = valor.replace(',', '')        
+        return valor
 
 class Form_Nota(ModelForm): 
 
@@ -56,6 +58,12 @@ class Form_Nota(ModelForm):
         widgets = {'valor': forms.TextInput(attrs={'onkeydown':"maskValor(this)"}),
                    'tipo_periodo': forms.Select(attrs={'class':'form-select mb-3'}),}        
         exclude = ['dt_inclusao']
+
+    def clean_valor(self):                        
+        valor=self.cleaned_data["valor"]
+        valor = valor.replace('.', '')
+        valor = valor.replace(',', '')        
+        return valor
 
 
 class Form_Contrato(ModelForm): 

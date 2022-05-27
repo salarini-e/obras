@@ -24,6 +24,7 @@ class Nota_Empenho(models.Model):
     tipo_periodo=models.CharField(max_length=1, choices=PERIODO_CHOICES, default='a', verbose_name='Tipo de período do empenho')
     periodo=models.CharField( max_length=5,verbose_name='Período do empenho')
     url=models.CharField(max_length=300, default='#', verbose_name='Link da nota do empenho')
+    ativo=models.BooleanField(default=False)
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão') 
 
 
@@ -40,7 +41,7 @@ class Nota_Fiscal(models.Model):
     ]
     
     empenho=models.ForeignKey(Nota_Empenho, on_delete=models.CASCADE)
-    n_nota=models.IntegerField(verbose_name='N. da nota fiscal')
+    n_nota=models.CharField(max_length=100 ,verbose_name='N. da nota fiscal')
     data=models.DateField(verbose_name='Data de expedição fiscal')
     valor=models.CharField(max_length=20,verbose_name='Valor da nota (R$)')
     tipo_periodo=models.CharField(max_length=1, choices=PERIODO_CHOICES, default='a', verbose_name='Tipo de Período')
@@ -92,11 +93,11 @@ class Contrato(models.Model):
 
     obra=models.ForeignKey(Obra, on_delete=models.CASCADE)   
     empresa=models.ForeignKey(Empresa, on_delete=models.PROTECT, verbose_name='Empresa contratada')
-    nota_fiscal=models.ForeignKey(Nota_Fiscal, on_delete=models.PROTECT)
+    nota_empenho=models.ManyToManyField(Nota_Empenho, blank=True)
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão') 
 
     def __str__(self):
-        return '%s - %s' % (self.id, self.nota_fiscal)
+        return '%s - %s' % (self.id, self.nota_empenho)
 
 class Aditivos(models.Model):
 

@@ -35,15 +35,30 @@
                 {% endif %}
             </div>           
             <div class="nota_fiscal" class="mt-4">
-                {% for f_nota in form_nota %}
-                {% if f_nota.label == 'Data de expedição' %}
-                <label for="">{{f_nota.label}}:</label>
-                {{f_nota|add_class:'form-control mb-3'|attr:'type:date'}}  
-                {% else %}
-                <label for="">{{f_nota.label}}:</label>
-                {{f_nota|add_class:'form-control mb-3'|attr:'type:text'|attr:'autocomplete:off'}}            
-                {% endif %}
-                {% endfor %}                                
+                <div class="pb-2">
+                    <div>Notas de empenho:</div>
+                    <div id="notas" class="d-flex flex-column pt-2">
+                        <table class="table table-stripet">
+                            <thead>
+                                <tr>
+                                    <th>N. empenho</th>
+                                    <th>Valor</th>
+                                    <th>Periodo</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="inserirEmpenhos">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div hidden>
+                    <input type="text" name="empenhos" id="id_empenhos">
+                </div>
+                <button type="button" class="btn btn-secondary w-100" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    + Adicionar nota de empenho
+                </button>                
             </div>
             <h4 class="text-uppercase mt-5">Dados da obra</h4>
             <div id="obra" class="mt-2">
@@ -60,9 +75,37 @@
         </form>
     </div>
 </div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-uppercase" id="exampleModalLabel">Nova nota de empenho</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            {% for f_nota in form_nota %}
+            {% if f_nota.label == 'Data de expediçã do empenho' %}
+            <label for="">{{f_nota.label}}:</label>
+            {{f_nota|add_class:'form-control mb-3'|attr:'type:date'}}  
+            {% else %}
+            <label for="">{{f_nota.label}}:</label>
+            {{f_nota|add_class:'form-control mb-3'|attr:'type:text'|attr:'autocomplete:off'}}            
+            {% endif %}
+            {% endfor %}                                
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button onclick="add_empenho()" type="button" class="btn btn-primary">Adicionar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 <script>
+    var myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {
+        keyboard: false
+    })
     function searchEmpresa(e){        
         if (3<=String(e.value).length){            
             getEmpresa(e.value)
@@ -80,6 +123,48 @@
             }
         });                
     };
+    function add_empenho(){
+            n_nota=document.getElementById('id_n_nota').value
+            data=document.getElementById('id_data').value
+            valor=document.getElementById('id_valor').value
+            tipo_periodo=document.getElementById('id_tipo_periodo').value
+            periodo=document.getElementById('id_periodo').value
+            url=document.getElementById('id_url').value
+
+            $.ajax({ 
+                            type: "POST",
+                            url: 'http://localhost:8000/api/empenhos/',        
+                            beforeSend: function (xhr, settings) {
+                                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                                xhr.setRequestHeader('Content-Type', 'application/json');
+                            },
+                            dataType: "json",
+                            data: JSON.stringify({                            
+                                'n_nota': n_nota,
+                                'data': data,
+                                'valor': valor,
+                                'tipo_periodo': tipo_periodo,
+                                'periodo': periodo,
+                                'url': url
+                            }),
+                            success: (data) => {                               
+                                console.log(data)
+                            },
+                            error: (error) => {
+                                if (error.state=200){
+                                        document.getElementById('inserirEmpenhos').innerHTML+=error.responseText
+                                        document.getElementById('id_empenhos').value+=n_nota+';'
+                                        console.log(document.getElementById('id_empenhos').value)
+                                        myModal.hide()
+                                }else{
+                                    console.log(error.status);    
+                                    console.log(error.statusText);    
+                                }
+                                
+                            }
+                    });
+ 
+        }        
     function selectThis(e){
         document.getElementById('search_empresa').value=e.value
         document.getElementById('searchResult').innerHTML=''

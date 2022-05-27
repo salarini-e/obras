@@ -7,6 +7,7 @@ app_name='obra'
 
 urlpatterns = [
     path('get_empresa/', views.get_empresa, name='get_empresa' ),    
+    path('get_notas/', views.get_notas, name='get_notas' ),    
     path('teste/', views.teste, name='teste' ),
 
     path('', views.index, name='index' ),
@@ -22,7 +23,8 @@ urlpatterns = [
     path('dados-obras/v/<id>/fotos/<url>', views.visualizar_foto_obra, name='visualizar_foto_obra' ),
     path('dados-obras/v/<id>/fotos/<url>/arquivar', views.arquivar_foto_obra, name='arquivar_foto_obra' ),
     path('dados-obras/v/<id>/notas', views.visualizar_notas, name='visualizar_notas' ),
-    
+    path('dados-obras/v/<contrato_id>/notas/cad_empenho', views.cadastrar_empenho, name='cadastrar_empenho' ),
+
     path('cadastrar-empresa/', views.cadastrar_empresa, name='cadastrar_empresa' ),
     path('editar-empresa/<id>', views.editar_empresa, name='editar_empresa' ),
     path('listar-empresa/', views.listar_empresa, name='listar_empresa' ),

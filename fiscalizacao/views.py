@@ -9,7 +9,8 @@ from django.core.files.storage import default_storage
 from settings.settings import BASE_DIR
 import os
 
-from .functions import get_client_ip
+from .functions import get_client_ip, progresso_obra
+
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -170,26 +171,70 @@ def get_empresa(request):
     }
     return render(request, 'fiscalizacao/get_empresa.html', context)
 
+def get_notas(request):
+    # print(request.GET.get('id'))
+    try:        
+        if request.GET.get('filter')=='all':
+            contrato=Contrato.objects.get(id=request.GET.get('id'))
+            notas=[]            
+            for i in contrato.nota_empenho.all():                
+                nf=Nota_Fiscal.objects.filter(empenho=i).order_by('id')
+                for n in nf:
+                    notas.append(n)
+
+            empenho_id=request.GET.get('id')
+        else:
+            empenho=Nota_Empenho.objects.get(id=request.GET.get('id'))
+            notas=Nota_Fiscal.objects.filter(empenho=empenho).order_by('id') 
+            empenho_id=empenho.n_nota   
+    except Exception as E:
+        print(E)
+        notas=[]    
+    print(notas)
+    context={
+        'filter': request.GET.get('filter'),
+        'notas': notas,        
+        'id': empenho_id
+    }
+    return render(request, 'fiscalizacao/get_notas_fiscais.html', context)
 
 @login_required
 def cadastrar_obra(request):    
-    if request.method=='POST':          
-        form_nota=Form_Empenho(request.POST)
+    if request.method=='POST': 
+
+        id_empenhos=request.POST['empenhos']
+        id_empenhos=id_empenhos.split(';')
+        id_empenhos.pop()
+        list_empenhos=[]
+
+        for id in id_empenhos:
+            list_empenhos.append(Nota_Empenho.objects.get(n_nota=id))
+
+        
         form_obra=Form_Obras(request.POST)
+
         try:
             empresa=Empresa.objects.get(nome=request.POST['empresa'])    
             go=True
         except:
             print(request.POST['empresa'])
             go=False
+        
         if go:
-            if form_obra.is_valid() and form_nota.is_valid():            
-
+            if form_obra.is_valid() and len(list_empenhos)>0:            
                 try:
                     obra=form_obra.save()
-                    nota=form_nota.save()
-                    contrato=Contrato(obra=obra, empresa=empresa, nota_fiscal=nota)
+                    contrato=Contrato(obra=obra, empresa=empresa)
                     contrato.save()
+                    try:
+                        for i in list_empenhos:
+                            i.ativo=True
+                            i.save()
+                            contrato.nota_empenho.add(i)
+                        contrato.save()
+                    except Exception as E:
+                        print(E)
+
                     os.mkdir(str(BASE_DIR)+'/settings/static/fotos/'+str(contrato.id))
                     error=False
                 except Exception as E:
@@ -203,19 +248,42 @@ def cadastrar_obra(request):
                 }
                 return render(request, 'fiscalizacao/cadastrar_obra.html', context)
         else:
+            print(form_obra.errors)
+            print(len(list_empenhos))
             error='ERROR'
 
     else:
-        error=False
-        form_nota=Form_Empenho()
+        error=False        
         form_obra=Form_Obras(initial={'cadastrado_por':request.user})    
 
     context={
         'error': error,
-        'form_nota': form_nota,
+        'form_nota': Form_Empenho(),
         'form_obra': form_obra,
     }
     return render(request, 'fiscalizacao/cadastrar_obra.html', context)
+
+@login_required
+def cadastrar_empenho(request, contrato_id):
+    form=Form_Empenho()
+    success=''
+    if request.method=='POST':
+        form=Form_Empenho(request.POST)
+        if form.is_valid():
+            obj=form.save()
+            cont=Contrato.objects.get(id=contrato_id)
+            cont.nota_empenho.add(obj)
+            cont.save()
+            obj.ativo=True
+            obj.save()
+            success='Novo empenho cadastrado com sucesso!'                    
+            form=Form_Empenho()
+    context={
+        'id': contrato_id,
+        'form': form,
+        'success': success
+    }
+    return render(request, 'fiscalizacao/cadastrar_empenho.html', context)
 
 @login_required
 def fiscalizar_obra(request, valor_busca='buscar'):
@@ -446,14 +514,26 @@ def arquivar_foto_obra(request, id, url):
 
 @login_required
 def visualizar_notas(request, id):
-    notas=Nota_Fiscal.objects.filter(id=id).order_by('dt_inclusao')
-    form=Form_Nota()
+    if request.method=='POST':  
+        form=Form_Nota(request.POST)                
+        if form.is_valid():
+            form.save()    
+        else: 
+            print(form.errors)                    
+    else:
+        # form=Form_Nota(initial={'cadastrado_por':request.user})
+        form=Form_Nota()
+    
+    contratos=Contrato.objects.get(id=id)
+    soma_notas, percent=progresso_obra(contratos)
     context={
         'obra': {'id': id},
-        'notas':notas,
-        'form': form
+        'notas':contratos.nota_empenho.all,
+        'form': form,
+        'progresso': int(soma_notas/percent)
     }
     return render(request, 'fiscalizacao/listar_notas_obra.html', context)
+
 @login_required
 def gerar_qr_code(request, obra_id):
     conteudo = f'''localhost:8000/gerar-qr-code/{obra_id}'''

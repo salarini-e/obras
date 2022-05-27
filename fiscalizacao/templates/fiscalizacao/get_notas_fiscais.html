@@ -1,0 +1,55 @@
+<div class="row">
+    <div class="col pt-2">
+        {% if filter == 'all' %}
+        <h5>TODAS AS MEDIÇÕES: </h5>
+        {% else %}
+        <h5>MEDIÇÕES DO EMPENHO {{id}}: </h5>
+        {% endif %}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <table class="table table-light table-striped mt-0">                                   
+            <tbody>    
+                {% for nota in notas %}                    
+                <tr>                   
+                    <td class="px-0 py-0 mb-2 d-flex flex-column">
+                        <div class="row px-3 pt-3">
+                            <div class="col d-flex px-3">                                                    
+                                <span><b>N. Nota:</b> {{nota.n_nota}}</span>
+                                <span class="ms-auto"><b>id:</b> {{nota.id}}</span>
+                            </div>
+                        </div>                                            
+                        <table class="my-4 mx-3">
+                            <thead>                                                    
+                                <th>Data de Expedição:</th>
+                                <th>Valor:</th>
+                                <th>Período:</th>                                                    
+                            </thead>
+                            <tbody>                                                    
+                                <td>{{nota.data}}</td>
+                                <td>R$ <span class="valor">{{nota.valor}}</span></td>
+                                <td>{{nota.periodo}} ({{nota.get_tipo_periodo_display}})</td>                                                    
+                            </tbody>
+                        </table>                                                                                              
+                        <div class="row">
+                            <div class="col px-4 pb-2 d-flex">
+                                <span><b>Data de inclusão:</b> {{nota.dt_inclusao}}</span>
+                                <span class="ms-auto">
+                                    <a class="btn p-0 ms-3 text-danger d-flex" style="margin-top: -3px;">
+                                        <span>
+                                            <i class="fas fa-trash"></i>
+                                        </span>
+                                        <span class="my-auto ms-1 pt-1"></span>  
+                                    </a>
+                                </span>
+                            </div>
+                        </div>                                    
+                    </td>                                                 
+                </tr>                                         
+               {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+</div>

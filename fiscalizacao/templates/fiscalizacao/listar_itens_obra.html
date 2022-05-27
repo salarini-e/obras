@@ -54,13 +54,11 @@
                                     R$ <span id="valorp">{{obra.obra.valor_previsto}}</span>
                                 </td>
                                 <td colspan="2">
-                                    <b>Valor em nota:</b><br>
-                                    R$ <span id="valorn">R$ {{obra.nota_fiscal.valor}}</span>
+                                    <b>Engenheiro responsável:</b><br>
+                                    <span>{{obra.obra.engenheiro}}</span>
                                 </td>           
                             </tr>    
                             <tr>                   
-                                <!-- <th class="text-end"></th>          
-                                <td><button class="btn btn-primary">Notas</button></td>   -->
                                 <td colspan="2" class="px-3">
                                     <b>CNPJ da empresa:</b><br>                      
                                     <span id="cnpj">{{obra.empresa.cnpj}}</span>
@@ -71,7 +69,7 @@
                                 </td>
                                 <td colspan="2" class="px-3">
                                     <b>Fiscal Responsável:</b><br>                      
-                                    <span>{{obra.obra.fiscal.all.0}}</span>
+                                    <span>{{obra.obra.fiscal}}</span>
                                 </td>  
                                 <td colspan="2" class="px-3">
                                     <b>Status:</b><br>                      
