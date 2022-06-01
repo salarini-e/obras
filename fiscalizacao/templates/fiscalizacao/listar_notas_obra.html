@@ -9,7 +9,7 @@
             <div class="col">
                 <h1>DADOS DA EXECUÇÃO DA OBRA</h1>
             </div>
-            <div class="col d-flex" style="position: relative;"> 
+            <div class="col-3 d-flex" style="position: relative;"> 
                 <a href="{% url 'obra:cadastrar_empenho' obra.id %}" type="button" class="btn btn-primary my-auto ms-auto">
                     <i class="fas fa-plus-circle me-2"></i>
                     Novo Empenho
@@ -23,7 +23,7 @@
             <div class="col pt-4">
                 <b class="mx-3">Progresso da obra:</b>
                 <div class="progress mx-3">                                
-                    <div class="progress-bar" role="progressbar" style="width: {{progresso}}%;" aria-valuenow="{{progresso}}" aria-valuemin="0" aria-valuemax="100">{{progresso}}%</div>
+                    <div class="progress-bar {% if progresso == 100 %}bg-success{% endif %}" role="progressbar" style="width: {{progresso}}%;" aria-valuenow="{{progresso}}" aria-valuemin="0" aria-valuemax="100">{{progresso}}%</div>
                   </div>
             </div>
         </div> 
@@ -66,7 +66,7 @@
                                                     <span class="d-flex mt-3">
                                                         <b>N. EMPENHO:</b> 
                                                         <span class="ms-2">{{nota.n_nota}}</span>
-                                                        <a class="btn p-0 ms-3 text-danger d-flex" style="margin-top: -3px;">
+                                                        <a class="btn p-0 ms-3 text-danger d-flex" style="margin-top: -3px;" data-toggle="tooltip" data-placement="top" title="Arquivar">
                                                             <span>
                                                                 <i class="fas fa-trash"></i>
                                                             </span>
@@ -131,7 +131,10 @@
                 {% if f_nota.label == 'Data de expedição fiscal' %}
                 <label for="">{{f_nota.label}}:</label>
                 {{f_nota|add_class:'form-control mb-3'|attr:'type:date'}} 
-
+                {% elif f_nota.label == 'Empenho' %}
+                <label for="">{{f_nota.label}}:</label>
+                <div id="insere-empenho">
+                </div>                
                 {% else %}
                 <label for="">{{f_nota.label}}:</label>
                 {{f_nota|add_class:'form-control mb-3'|attr:'type:text'|attr:'autocomplete:off'}}            
@@ -162,9 +165,7 @@ font-weight: bold;
 label{
 font-weight: bold;
 }
-.show_nota{
 
-}
 
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -193,5 +194,26 @@ font-weight: bold;
             }
         });                
     };
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+    $.ajax({ 
+                            type: "GET",
+                            url: '/get-empenho/',        
+                            //beforeSend: function (xhr, settings) {
+                                //xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                                // xhr.setRequestHeader('Content-Type', 'application/json');
+                            //},
+
+                            data: {                            
+                                id: '{{obra.id}}',                                
+                            },
+                            success: (data) => {                               
+                                document.getElementById('insere-empenho').innerHTML=data                                
+                            },                        
+            });
+ 
+          
 </script>
 {% endblock %}

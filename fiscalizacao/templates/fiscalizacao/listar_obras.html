@@ -107,10 +107,26 @@ function getObra(value){
             },
             success: function(data) {                               
                 $("#searchResult").html(data);
+                attValor()
             }
         });                
     };
 
     getObra('')    
+
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+  function attValor(){
+    $(document).ready(function(){
+      valores=document.getElementsByClassName('valor')                
+      for(i in valores){
+        console.log('#'+valores[i].id)
+        $('#'+String(valores[i].id)).mask('#.##0.000,00', {reverse: true});
+      }
+    });
+  }
+        
+  attValor()
 </script>
 {% endblock %}

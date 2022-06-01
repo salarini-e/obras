@@ -17,11 +17,17 @@ urlpatterns = [
 
     path('cadastrar-obra/', views.cadastrar_obra, name='cadastrar' ),
     path('get-obras/', views.get_obras, name='get_obras' ),
+    path('get-empenho/', views.get_empenhos, name='get_empenhos' ),
+    
     path('dados-obras/<valor_busca>', views.listar_obras, name='visualizar' ),
     path('dados-obras/v/<id>', views.visualizar_obra, name='visualizar_obra' ),
+    
+    path('dados-obras/v/<id>/editar', views.editar_obra, name='editar_obra' ),
+
     path('dados-obras/v/<id>/fotos', views.visualizar_fotos_obra, name='visualizar_fotos_obra' ),
     path('dados-obras/v/<id>/fotos/<url>', views.visualizar_foto_obra, name='visualizar_foto_obra' ),
     path('dados-obras/v/<id>/fotos/<url>/arquivar', views.arquivar_foto_obra, name='arquivar_foto_obra' ),
+    
     path('dados-obras/v/<id>/notas', views.visualizar_notas, name='visualizar_notas' ),
     path('dados-obras/v/<contrato_id>/notas/cad_empenho', views.cadastrar_empenho, name='cadastrar_empenho' ),
 

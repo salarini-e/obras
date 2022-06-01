@@ -12,7 +12,7 @@ def progresso_obra(contratos):
     soma_empenhos=0
     soma_notas=0
     ids=[]
-    for i in contratos.nota_empenho.all():
+    for i in contratos.nota_empenho.filter(ativo=True):
         soma_empenhos+=int(i.valor)
         notas_fiscais=Nota_Fiscal.objects.filter(empenho=i)
         for n in notas_fiscais:

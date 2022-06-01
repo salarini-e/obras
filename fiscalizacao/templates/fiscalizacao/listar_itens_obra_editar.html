@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load widget_tweaks %}  
+{% block main %}
+
+<div class="row">    
+    <div class="col container p-5">
+        <div class="row">
+            <div class="col">
+                <h1>DADOS DA OBRA</h1>
+            </div>
+            <div class="col d-flex" style="position: relative;">                                   
+                <a class="btn btn-primary my-auto ms-auto" href="{% url 'obra:visualizar_obra' obra.id %}">
+                    Voltar
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-4">   
+                <div class="p-3">
+                    <div class="mb-2" style="background-color: #d6e7f8;">
+                        <div class="py-3 px-3">                        
+                            <div class="d-flex ps-4">
+                                <span class="my-auto"><b>id: </b>{{obra.id}}</span>
+                                <span class="ms-auto">
+                                    <a href="#" class="btn btn-warning me-2">Arquivar tudo</a>
+                                    <!-- <a href="#" class="btn btn-success">Notas</a> -->
+                                </span>
+                            </div>
+                        </div>
+                    </div>                
+                    <div class="d-flex">
+                        <div id="obra" class="mt-2 col-6 mx-auto">
+                          <form method="POST">                              
+                            <h1 class="mb-5 mt-4">Editar informações da obra</h1>
+                            {% csrf_token %}
+                            <div id="contrato" class="pb-3">                
+                                <label for="">Empresa contratada:</label>
+                                <input value="{{empresa}}" name="empresa" id="search_empresa" onkeyup="searchEmpresa(this)" type="text" class="form-control" autocomplete="off">                
+                                <span id="searchResult"></span> 
+                                {% if error %}
+                                <br>{{error}}
+                                {% endif %}
+                            </div>   
+                            {% for f_obra in form_obra %}
+                            {% if f_obra.name != 'cadastrado_por' %}
+                            <label for="">{{f_obra.label}}:</label>
+                            {% endif %}
+                            {{f_obra|add_class:'form-control mb-3'|attr:'autocomplete:off'}}            
+                            {% endfor %}
+                            {% buttons %}
+                                <button type="submit" class="btn btn-primary px-5">Editar</button>
+                            {% endbuttons %}
+                          </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>      
+    </div>
+</div>
+<style>
+.form-control:disabled, .form-control[readonly]{               
+font-weight: bold;
+}
+label{
+font-weight: bold;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+<script>
+
+function searchEmpresa(e){        
+        if (3<=String(e.value).length){            
+            getEmpresa(e.value)
+        }        
+    }    
+function getEmpresa(value){
+    var url = '/get_empresa/';  // get the url of the `load_cities` view        
+    $.ajax({ 
+        url: url,
+        data: {
+            'nome': value,
+        },
+        success: function(data) {                               
+            $("#searchResult").html(data);
+        }
+    });                
+};
+function selectThis(e){
+    document.getElementById('search_empresa').value=e.value
+    document.getElementById('searchResult').innerHTML=''
+}
+$("#valorn").mask('#.##0.000,00', {reverse: true});
+$("#valorp").mask('#.##0.000,00', {reverse: true});
+$("#cnpj").mask("99.999.999/9999-99");
+</script>
+{% endblock %}

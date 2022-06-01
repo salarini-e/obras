@@ -1,0 +1,6 @@
+<select name="empenho" autocomplete="off" class="form-control mb-3" required="" id="id_empenho">
+    <option value="" selected="">---------</option>
+    {% for empenho in empenhos %}
+    <option value="{{empenho.id}}">{{empenho.n_nota}}</option>
+    {% endfor %}
+  </select>

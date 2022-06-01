@@ -133,7 +133,8 @@
 
             $.ajax({ 
                             type: "POST",
-                            url: 'http://localhost:8000/api/empenhos/',        
+                            // url: 'http://localhost:8000/api/empenhos/',        
+                            url: 'http://obras.pmnf.rj.gov.br/api/empenhos/',        
                             beforeSend: function (xhr, settings) {
                                 xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
                                 xhr.setRequestHeader('Content-Type', 'application/json');

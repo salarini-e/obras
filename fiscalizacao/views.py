@@ -171,6 +171,14 @@ def get_empresa(request):
     }
     return render(request, 'fiscalizacao/get_empresa.html', context)
 
+def get_empenhos(request):
+    print(request.GET.get('id'))
+    contrato=Contrato.objects.get(id=request.GET.get('id'))
+    context={
+        'empenhos': contrato.nota_empenho.all,
+    }
+    return render(request, 'fiscalizacao/get_empenhos.html', context)
+
 def get_notas(request):
     # print(request.GET.get('id'))
     try:        
@@ -526,13 +534,60 @@ def visualizar_notas(request, id):
     
     contratos=Contrato.objects.get(id=id)
     soma_notas, percent=progresso_obra(contratos)
+    if percent!=0:
+        progresso=int(soma_notas/percent)
+    else:
+        progresso=0
+
     context={
         'obra': {'id': id},
-        'notas':contratos.nota_empenho.all,
+        'notas':contratos.nota_empenho.filter(ativo=True),
         'form': form,
-        'progresso': int(soma_notas/percent)
+        'progresso': progresso
     }
     return render(request, 'fiscalizacao/listar_notas_obra.html', context)
+
+@login_required
+def editar_obra(request, id):
+    print(id)
+    contrato=Contrato.objects.get(id=id)
+    form_obra=Form_Obras(instance=contrato.obra)
+    if request.method=='POST':
+        form_obra_POST=Form_Obras(request.POST, instance=contrato.obra)
+        if form_obra_POST.is_valid():
+            acoes={}
+            for i in form_obra_POST:      
+                if i.name!='cadastrado_por':    
+                    if form_obra[i.name].value()!=form_obra_POST.cleaned_data[i.name]:
+                        # print(i.name)                    
+                        acoes[i.name]={
+                            'antes': form_obra[i.name].value(),
+                            'depois': form_obra_POST.cleaned_data[i.name]
+                        }
+                else:
+                    if form_obra[i.name].value()!=form_obra_POST.cleaned_data[i.name].id:
+                        acoes[i.name]={
+                            'antes': form_obra[i.name].value(),
+                            'depois': form_obra_POST.cleaned_data[i.name].id
+                        }                        
+            form_obra_POST.save()
+            log=Log(
+                    tabela='Obra',
+                    ref=contrato.obra.id,
+                    tipo='u', 
+                    acao=acoes,
+                    user=request.user, 
+                    ipv4=get_client_ip(request)
+                )
+            log.save()          
+    
+
+    context={
+        'obra': {'id':id},        
+        'empresa': contrato.empresa.nome,
+        'form_obra': form_obra
+    }
+    return render(request, 'fiscalizacao/listar_itens_obra_editar.html', context)
 
 @login_required
 def gerar_qr_code(request, obra_id):

@@ -54,6 +54,10 @@ class Nota_Fiscal(models.Model):
     def __str__(self):
         return '%s' % (self.n_nota)
 
+class Nota_Fiscal_Arquivada(models.Model):    
+    nota=models.ForeignKey(Nota_Fiscal, on_delete=models.CASCADE)
+    dt_arquivado=models.DateTimeField(auto_now_add=True, verbose_name='Arquivado em') 
+    
 class Empresa(models.Model):
     nome=models.CharField(max_length=150, verbose_name='Nome da empresa')
     cnpj=models.CharField(max_length=14, verbose_name='CNPJ', unique=True)
@@ -99,10 +103,10 @@ class Contrato(models.Model):
     def __str__(self):
         return '%s - %s' % (self.id, self.nota_empenho)
 
-class Aditivos(models.Model):
+# class Aditivos(models.Model):
 
-    contrato=models.ForeignKey(Contrato, on_delete=models.CASCADE)
-    nota_fiscal=models.ForeignKey(Nota_Fiscal, on_delete=models.PROTECT)    
+#     contrato=models.ForeignKey(Contrato, on_delete=models.CASCADE)
+#     nota_fiscal=models.ForeignKey(Nota_Fiscal, on_delete=models.PROTECT)    
     
 class Obra_Fiscal(models.Model):
 

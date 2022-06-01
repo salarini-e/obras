@@ -22,32 +22,24 @@
         {% for contrato in obras %}
         <tr>                            
             <td>
-                <a href="{% url 'obra:visualizar_obra' contrato.id %}">
+                <a href="{% url 'obra:visualizar_obra' contrato.id %}" data-toggle="tooltip" data-placement="top" title="Ver detalhes">
                     <i class="fas fa-eye"></i>
                 </a>
             </td>
             <th  scope="row">{{ contrato.id }}</th>                            
             <td>{{contrato.empresa.nome}}</td>                            
             <td>{{contrato.obra.objeto_da_obra}}</td>                            
-            <td>R$ <span class="valor">{{contrato.obra.valor_previsto}}</span></td>
-            <td>{{contrato.obra.fiscal.all.0}}</td>            
+            <td>R$ <span class="valor" id="valor-{{contrato.id}}">{{contrato.obra.valor_previsto}}</span></td>
+            <td>{{contrato.obra.fiscal}}</td>            
             <td>{{contrato.obra.status}}</td>  
             <td>
-                <a href="{% url 'obra:gerar_qrcode' contrato.obra.id %}">
-                    <i class="fas fa-qrcode"></i>
+                <a href="{% url 'obra:gerar_qrcode' contrato.obra.id %}" data-toggle="tooltip" data-placement="top" title="Gerar QR Code">
+                    <i class="fas fa-qrcode"></i> 
                 </a>
             </td>
         </tr>    
         {% endfor %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
-        <script>
-            $(document).ready(function(){
-                valores=document.getElementsByClassName('valor')                
-                for(i in valores){
-                    valores[i].innerText=parseInt(valores[i].innerText).toLocaleString('pt-br', {minimumFractionDigits: 2})
-                }
-            });
-        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>        
       </tbody>
 </table>
