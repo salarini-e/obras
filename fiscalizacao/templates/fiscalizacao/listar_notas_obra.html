@@ -25,6 +25,10 @@
                 <div class="progress mx-3">                                
                     <div class="progress-bar {% if progresso == 100 %}bg-success{% endif %}" role="progressbar" style="width: {{progresso}}%;" aria-valuenow="{{progresso}}" aria-valuemin="0" aria-valuemax="100">{{progresso}}%</div>
                   </div>
+                  <small class="mx-3">
+                      <span class="me-4">Valor previsto: R$<span class="valor" id="previsto">{{previsto}}</span></span>
+                      <span>Total abatido: R$<span class="valor" id="abatido">{{soma_notas}}</span></span>
+                  </small>
             </div>
         </div> 
         <div class="row">
@@ -53,10 +57,10 @@
                         <div class="col">
                             <div class="row">
                                 <div class="col pt-2">
-                                    <h5>NOTAS DE EMPENHOS: </h5>
+                                    <h5>NOTAS DE EMPENHOS EM EXERCÍCIO: </h5>
                                 </div>
                             </div>
-                            <table class="table table-light table-striped mt-0">                                   
+                            <table class="table table-light table-striped mt-0 mb-1">                                   
                                 <tbody>    
                                     {% for nota in notas %}                    
                                     <tr class="pb-3">                   
@@ -84,7 +88,7 @@
                                                 </thead>
                                                 <tbody>                                                    
                                                     <td>{{nota.data}}</td>
-                                                    <td>R$ <span class="valor">{{nota.valor}}</span></td>
+                                                    <td>R$ <span class="valor" id="valor-{{nota.id}}">{{nota.valor}}</span></td>
                                                     <td>{{nota.periodo}} ({{nota.get_tipo_periodo_display}})</td>                                                    
                                                 </tbody>
                                             </table>                                                                                              
@@ -98,12 +102,17 @@
                                                         <span class="my-auto ms-1 pt-1">Medições</span>                                               
                                                     </a>
                                                 </div>
-                                            </div>                                                             
+                                            </div>                                                                                                    
                                         </td>                                                 
                                     </tr>                                         
                                    {% endfor %}
                                 </tbody>
                             </table>
+                            <div class="row px-3">
+                                <div class="col px-4 py-2 d-flex bg-primary text-white">
+                                    <b class="me-3">Valor total:</b> R$<span class="valor" id="total-empenhos">{{soma_empenhos}}</span> 
+                                </div>
+                            </div>     
                         </div>
                         <div  id="exibirNotasAqui" class="col">
                            
@@ -171,16 +180,6 @@ font-weight: bold;
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 <script>
-    function maskValor(input){    
-        $(input).mask('#.##0.000,00', {reverse: true});
-    }
-    $(document).ready(function(){
-        valores=document.getElementsByClassName('valor')                
-        for(i in valores){
-            valores[i].innerText=parseInt(valores[i].innerText).toLocaleString('pt-br', {minimumFractionDigits: 2})
-        }
-    });
-    
     function exibirNotas(filter, value){
         var url = '/get_notas/';  // get the url of the `load_cities` view        
         $.ajax({ 
@@ -191,6 +190,7 @@ font-weight: bold;
             },
             success: function(data) {                               
                 $("#exibirNotasAqui").html(data);
+                attValor()
             }
         });                
     };
@@ -213,6 +213,16 @@ font-weight: bold;
                                 document.getElementById('insere-empenho').innerHTML=data                                
                             },                        
             });
+            function attValor(){
+
+    $(document).ready(function(){
+      valores=document.getElementsByClassName('valor')                
+      for(i in valores){        
+        $('#'+String(valores[i].id)).mask('#.##0.000,00', {reverse: true});
+      }
+    });
+  }
+  attValor()
  
           
 </script>

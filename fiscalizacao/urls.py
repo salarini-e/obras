@@ -41,7 +41,7 @@ urlpatterns = [
     path('cadastrar-fiscal/', views.cadastrar_fiscal, name='cadastrar_fiscal' ),
     path('listar-fiscais/', views.listar_fiscais, name='listar_fiscais' ),
 
-    path('ver-obra/', views.fiscalizar_obra, name='buscar' ),
+    # path('ver-obra/', views.fiscalizar_obra, name='buscar' ),
     # path('ver-obra/<valor_busca>', views.fiscalizar_obra, name='visualizar' ),
     path('gerar-qr-code/<obra_id>', views.gerar_qr_code, name='gerar_qrcode' ),
 ]

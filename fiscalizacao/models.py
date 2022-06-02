@@ -78,9 +78,11 @@ class Fiscal(models.Model):
 
 class Obra(models.Model):        
 
+    n_processo_adm=models.CharField(max_length=50, default='', blank=True ,verbose_name='Número do Processo Administrativo') 
     objeto_da_obra=models.CharField(max_length=150, verbose_name='Objeto da obra')
     populacao_atendida=models.CharField(max_length=150, verbose_name='População atendida')
     valor_previsto=models.CharField(max_length=20, verbose_name='Valor previsto do contrato (R$)')
+    n_processo_pagamento=models.CharField(max_length=50, default='', blank=True,verbose_name='Número do Processo de Pagamento') 
     status=models.ForeignKey(Status, on_delete=models.PROTECT, verbose_name='Situação')    
     fiscal=models.ForeignKey(Fiscal,on_delete=models.PROTECT, verbose_name='Fiscal responsável')
     fiscal_substituto=models.ForeignKey(Fiscal,on_delete=models.PROTECT, verbose_name='Fiscal substituto', related_name='substituto')
@@ -125,6 +127,11 @@ class Fotos(models.Model):
 
     def __str__(self):
         return '%s' % (self.url)
+
+class Aditivo(models.Model):
+    prazo=models.BooleanField()
+    valor=models.BooleanField()
+    id_empenho=models.CharField(max_length=50)
 
 class Log(models.Model):
 

@@ -10,7 +10,8 @@ def get_client_ip(request):
 
 def progresso_obra(contratos):
     soma_empenhos=0
-    soma_notas=0
+    soma_notas=0  
+    previsto=int(contratos.obra.valor_previsto)  
     ids=[]
     for i in contratos.nota_empenho.filter(ativo=True):
         soma_empenhos+=int(i.valor)
@@ -18,5 +19,5 @@ def progresso_obra(contratos):
         for n in notas_fiscais:
             soma_notas+=int(n.valor)
         
-    percent=soma_empenhos/100.00
-    return soma_notas, percent
+    percent=previsto/100.00
+    return soma_notas, percent, soma_empenhos, previsto

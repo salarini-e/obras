@@ -9,7 +9,7 @@
 </div>
 <div class="row">
     <div class="col">
-        <table class="table table-light table-striped mt-0">                                   
+        <table class="table table-light table-striped mt-0 mb-0">                                   
             <tbody>    
                 {% for nota in notas %}                    
                 <tr>                   
@@ -28,7 +28,7 @@
                             </thead>
                             <tbody>                                                    
                                 <td>{{nota.data}}</td>
-                                <td>R$ <span class="valor">{{nota.valor}}</span></td>
+                                <td>R$ <span class="valor" id="valor-{{id}}-{{nota.id}}">{{nota.valor}}</span></td>
                                 <td>{{nota.periodo}} ({{nota.get_tipo_periodo_display}})</td>                                                    
                             </tbody>
                         </table>                                                                                              
@@ -50,6 +50,10 @@
                {% endfor %}
             </tbody>
         </table>
-        
+        <div class="row px-3 py-0">
+            <div class="col px-4 py-2 d-flex bg-primary text-white">
+                <b class="me-3">Valor total abatido:</b> R$<span class="valor" id="soma-notas">{{soma_notas}}</R1span>
+            </div>
+        </div> 
     </div>
 </div>

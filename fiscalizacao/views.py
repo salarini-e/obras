@@ -22,17 +22,17 @@ def cadastrar_empresa(request):
         # print(form)           
         if form.is_valid():
             empresa=form.save()             
-            acao={''}
-            log=Log(
-                    tabela='Empresa',
-                    ref=empresa.id,
-                    tipo='c', 
-                    acao=acao,
-                    user=request.user, 
-                    ipv4=get_client_ip(request)
-                )
-            log.save()
-            print(empresa.id)
+            # acao={''}
+            # log=Log(
+            #         tabela='Empresa',
+            #         ref=empresa.id,
+            #         tipo='c', 
+            #         acao=acao,
+            #         user=request.user, 
+            #         ipv4=get_client_ip(request)
+            #     )
+            # log.save()
+            # print(empresa.id)
             context={
                 'form': Form_Empresa(initial={'cadastrado_por':request.user}),
                 'success': 'Empresa cadastrada com sucesso!'
@@ -78,32 +78,32 @@ def editar_empresa(request, id):
     if request.method=='POST':  
         form_=Form_Empresa(request.POST, instance=empresa)           
         if form_.is_valid():
-            acoes={}
-            for i in form_:      
-                if i.name!='cadastrado_por':    
-                    if form[i.name].value()!=form_.cleaned_data[i.name]:
-                        # print(i.name)                    
-                        acoes[i.name]={
-                            'antes': form[i.name].value(),
-                            'depois': form_.cleaned_data[i.name]
-                        }
-                else:
-                    if form[i.name].value()!=form_.cleaned_data[i.name].id:
-                        acoes[i.name]={
-                            'antes': form[i.name].value(),
-                            'depois': form_.cleaned_data[i.name].id
-                        }
+            # acoes={}
+            # for i in form_:      
+            #     if i.name!='cadastrado_por':    
+            #         if form[i.name].value()!=form_.cleaned_data[i.name]:
+            #             # print(i.name)                    
+            #             acoes[i.name]={
+            #                 'antes': form[i.name].value(),
+            #                 'depois': form_.cleaned_data[i.name]
+            #             }
+            #     else:
+            #         if form[i.name].value()!=form_.cleaned_data[i.name].id:
+            #             acoes[i.name]={
+            #                 'antes': form[i.name].value(),
+            #                 'depois': form_.cleaned_data[i.name].id
+            #             }
             # print(acoes)              
             empresa=form_.save()                         
-            log=Log(
-                    tabela='Empresa',
-                    ref=empresa.id,
-                    tipo='u', 
-                    acao=acoes,
-                    user=request.user, 
-                    ipv4=get_client_ip(request)
-                )
-            log.save()            
+            # log=Log(
+            #         tabela='Empresa',
+            #         ref=empresa.id,
+            #         tipo='u', 
+            #         acao=acoes,
+            #         user=request.user, 
+            #         ipv4=get_client_ip(request)
+            #     )
+            # log.save()            
             context={
                 'form': form_,
                 'success': 'Cadastrada da empresa atualizado com sucesso!'
@@ -198,11 +198,19 @@ def get_notas(request):
     except Exception as E:
         print(E)
         notas=[]    
-    print(notas)
+    soma_notas=0
+    for nota in notas:
+        try:
+            soma_notas+=int(nota.valor)
+        except:
+            soma_notas+=0
+
     context={
         'filter': request.GET.get('filter'),
         'notas': notas,        
-        'id': empenho_id
+        'id': empenho_id,
+        'soma_notas': soma_notas
+
     }
     return render(request, 'fiscalizacao/get_notas_fiscais.html', context)
 
@@ -292,95 +300,6 @@ def cadastrar_empenho(request, contrato_id):
         'success': success
     }
     return render(request, 'fiscalizacao/cadastrar_empenho.html', context)
-
-@login_required
-def fiscalizar_obra(request, valor_busca='buscar'):
-    if valor_busca=='buscar':
-        buscar=True
-        contrato=Form_Obras()
-        success=False
-        contratos=Contrato.objects.all()
-    else:
-        buscar=False
-        contratos=[]
-        try:
-            try:
-                contrato=Contrato.objects.get(id=valor_busca)        
-                success=True
-            except:
-            
-                contratos=Contrato.objects.filter(empresa=Empresa.objects.get(nome__icontains=valor_busca))        
-                success=False
-                buscar=True
-                contrato=Form_Contrato()                
-                if len(contratos)==1:
-                    success=True                        
-                    buscar=False
-                    contrato=Contrato.objects.get(empresa=Empresa.objects.get(nome__icontains=valor_busca))
-                elif len(contratos)==0:
-                    success=False
-                    buscar=False
-                    contrato=Form_Contrato()                                    
-        except:
-            try:
-                fiscais=Fiscal.objects.filter(nome__icontains=valor_busca)                
-                obras=[]   
-                obra_fiscal=[]             
-                for fiscal in fiscais:                    
-                    obra_fiscal.append(Obra_Fiscal.objects.filter(fiscal=fiscal))        
-                if len(obra_fiscal)==1:
-                    try:
-                        obras.append(obra_fiscal[0].obra)
-                    except:
-                        obras.append(obra_fiscal[0])
-                else:
-                    for i in obra_fiscal:
-                        if len(i)>1:                            
-                            for o in i:
-                                print('a', o)
-                                try:
-                                    obras.append(o.obra)
-                                except:
-                                    obras.append(o)
-                        else:
-                            
-                            try:
-                                obras.append(i[0].obra)
-                            except:
-                                obras.append(i[0])
-                contrato=Form_Contrato()                
-                
-                for obra in obras:                    
-                    try:
-                        contratos.append(Contrato.objects.filter(obra=obra.id))                
-                    except:                        
-                        for o in obra:
-                            contratos.append(Contrato.objects.filter(obra=o.obra.id))   
-                             
-                if len(contratos)==1:
-                    success=True                        
-                    buscar=False                    
-                elif len(contratos)==0:
-                    success=False
-                    buscar=False
-                    contrato=Form_Contrato()
-                success=False
-                buscar=True
-                contratos_=[]
-                for contrato in contratos:
-                    contratos_.append(contrato[0])
-                contratos=contratos_
-            except Exception as E:
-                print('ops', E)
-                success=False
-                contrato=Form_Contrato()
-    context={
-        'form': contrato,
-        'success':success,
-        'buscar': buscar,
-        'obra': contratos
-    }
-    return render(request, 'fiscalizacao/fiscalizar_obra.html', context)
 
 @login_required
 def get_obras(request):
@@ -533,9 +452,11 @@ def visualizar_notas(request, id):
         form=Form_Nota()
     
     contratos=Contrato.objects.get(id=id)
-    soma_notas, percent=progresso_obra(contratos)
+    soma_notas, percent, soma_empenhos, previsto=progresso_obra(contratos)
     if percent!=0:
         progresso=int(soma_notas/percent)
+        if progresso >= 100:
+            progresso=100            
     else:
         progresso=0
 
@@ -543,7 +464,10 @@ def visualizar_notas(request, id):
         'obra': {'id': id},
         'notas':contratos.nota_empenho.filter(ativo=True),
         'form': form,
-        'progresso': progresso
+        'progresso': progresso,
+        'soma_empenhos': soma_empenhos,
+        'soma_notas': soma_notas,
+        'previsto': previsto
     }
     return render(request, 'fiscalizacao/listar_notas_obra.html', context)
 
@@ -555,31 +479,32 @@ def editar_obra(request, id):
     if request.method=='POST':
         form_obra_POST=Form_Obras(request.POST, instance=contrato.obra)
         if form_obra_POST.is_valid():
-            acoes={}
-            for i in form_obra_POST:      
-                if i.name!='cadastrado_por':    
-                    if form_obra[i.name].value()!=form_obra_POST.cleaned_data[i.name]:
-                        # print(i.name)                    
-                        acoes[i.name]={
-                            'antes': form_obra[i.name].value(),
-                            'depois': form_obra_POST.cleaned_data[i.name]
-                        }
-                else:
-                    if form_obra[i.name].value()!=form_obra_POST.cleaned_data[i.name].id:
-                        acoes[i.name]={
-                            'antes': form_obra[i.name].value(),
-                            'depois': form_obra_POST.cleaned_data[i.name].id
-                        }                        
-            form_obra_POST.save()
-            log=Log(
-                    tabela='Obra',
-                    ref=contrato.obra.id,
-                    tipo='u', 
-                    acao=acoes,
-                    user=request.user, 
-                    ipv4=get_client_ip(request)
-                )
-            log.save()          
+            # acoes={}
+            # for i in form_obra_POST:      
+                # if i.name!='cadastrado_por':    
+                #     if form_obra[i.name].value()!=form_obra_POST.cleaned_data[i.name]:
+                                          
+                #         acoes[i.name]={
+                #             'antes': form_obra[i.name].value(),
+                #             'depois': form_obra_POST.cleaned_data[i.name]
+                #         }
+                # else:
+                #     if form_obra[i.name].value()!=form_obra_POST.cleaned_data[i.name].id:
+                #         acoes[i.name]={
+                #             'antes': form_obra[i.name].value(),
+                #             'depois': form_obra_POST.cleaned_data[i.name].id
+                #         }                        
+            obra=form_obra_POST.save()
+            form_obra=Form_Obras(instance=obra)
+            # log=Log(
+            #         tabela='Obra',
+            #         ref=contrato.obra.id,
+            #         tipo='u', 
+            #         acao=acoes,
+            #         user=request.user, 
+            #         ipv4=get_client_ip(request)
+            #     )
+            # log.save()          
     
 
     context={

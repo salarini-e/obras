@@ -32,3 +32,6 @@ def validate_CNPJ(value):
             raise ValidationError(error_messages['invalid_CNPJ'])
     # print(orig_value)
     return orig_value
+
+def validar_data_ntoa_fiscal():
+    return ''

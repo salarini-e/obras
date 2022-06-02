@@ -14,7 +14,13 @@ class Form_Obras(ModelForm):
                    'fiscal': forms.Select(attrs={'class':'form-select mb-3'}),
                    'fiscal_substituto': forms.Select(attrs={'class':'form-select mb-3'}),}
         exclude = ['dt_inclusao']
-
+    
+    def clean_valor_previsto(self):                        
+        valor=self.cleaned_data["valor_previsto"]
+        valor = valor.replace('.', '')
+        valor = valor.replace(',', '')        
+        return valor
+        
 class Form_Fiscal(ModelForm): 
     
     class Meta:

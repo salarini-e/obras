@@ -5,8 +5,8 @@
 {% else %}
 <tr>
     <td>{{nota.n_nota}}</td>
-    <td>{{nota.valor}}</td>
+    <td>R$ <span class="valor" id="nota-{{nota.id}}">{{nota.valor}}</span></td>
     <td>{{nota.periodo}} ({{nota.tipo_periodo}})</td>
-    <th><button onclick="(this)=>{console.log(this.target.id)}" id="{{nota.n_nota}}" type="button" class="btn">X</button></th>
+    <th><button onclick="(e)=>{console.log(e.target.id)}" id="{{nota.n_nota}}" type="button" class="btn">X</button></th>
 </tr>
 {% endif %}

@@ -134,7 +134,7 @@
             $.ajax({ 
                             type: "POST",
                             // url: 'http://localhost:8000/api/empenhos/',        
-                            url: 'http://obras.pmnf.rj.gov.br/api/empenhos/',        
+                            url: '/api/empenhos/',        
                             beforeSend: function (xhr, settings) {
                                 xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
                                 xhr.setRequestHeader('Content-Type', 'application/json');
@@ -157,6 +157,7 @@
                                         document.getElementById('id_empenhos').value+=n_nota+';'
                                         console.log(document.getElementById('id_empenhos').value)
                                         myModal.hide()
+                                        attValor()
                                 }else{
                                     console.log(error.status);    
                                     console.log(error.statusText);    
@@ -173,7 +174,14 @@
     function maskValor(input){    
         $(input).mask('#.##0.000,00', {reverse: true});
     }
-    
+    function attValor(){
+        $(document).ready(function(){
+            valores=document.getElementsByClassName('valor')                
+            for(i in valores){        
+            $('#'+String(valores[i].id)).mask('#.##0.000,00', {reverse: true});
+        }
+    });
+}
     // document.getElementById('nota_fiscal').style.display='none';
     // document.getElementById('obra').style.display='none';
     // function exibirFormNota(){
