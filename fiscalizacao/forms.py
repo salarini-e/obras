@@ -20,7 +20,7 @@ class Form_Obras(ModelForm):
         valor = valor.replace('.', '')
         valor = valor.replace(',', '')        
         return valor
-        
+
 class Form_Fiscal(ModelForm): 
     
     class Meta:
@@ -49,7 +49,7 @@ class Form_Empenho(ModelForm):
         model = Nota_Empenho
         widgets = {'valor': forms.TextInput(attrs={'onkeydown':"maskValor(this)"}),
                    'tipo_periodo': forms.Select(attrs={'class':'form-select mb-3'}),}        
-        exclude = ['ativo', 'dt_inclusao']
+        exclude = ['ativo', 'dt_inclusao', 'tipo_empenho', 'abatido', 'substituido', 'substituindo']
 
     def clean_valor(self):                        
         valor=self.cleaned_data["valor"]

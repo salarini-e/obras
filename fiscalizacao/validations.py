@@ -5,6 +5,8 @@ from django.core.validators import EMPTY_VALUES
 from django.forms import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
+from fiscalizacao.models import Nota_Fiscal
+
 error_messages = {
     'invalid_CNPJ': _("CNPJ inválido."),    
     'max_digits': _("Este campo requer 14 dígitos."),
@@ -33,5 +35,11 @@ def validate_CNPJ(value):
     # print(orig_value)
     return orig_value
 
-def validar_data_ntoa_fiscal():
+def validar_data_noto_fiscal(value):
+    #data depois do empenho
+    return ''
+
+def validar_valor_nota_fiscal(nota):
+    #data depois do empenho
+    
     return ''

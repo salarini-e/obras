@@ -10,44 +10,29 @@
                 <h1>DADOS DA EXECUÇÃO DA OBRA</h1>
             </div>
             <div class="col-4 d-flex" style="position: relative;"> 
-                <a href="{% url 'obra:visualizar_notas_arquivadas' obra.id %}" type="button" class="btn btn-secondary my-auto ms-auto">
-                    <i class="fas fa-archive me-2"></i>
-                    Arquivo
-                </a>
-                <a href="{% url 'obra:cadastrar_empenho' obra.id %}" type="button" class="btn btn-primary my-auto ms-2">
-                    <i class="fas fa-plus-circle me-2"></i>
-                    Novo Empenho
-                </a>
-                <a class="btn btn-primary my-auto ms-2" href="{% url 'obra:visualizar_obra' obra.id %}">
+                <a class="btn btn-dark my-auto ms-auto" href="{% url 'obra:visualizar_notas' obra.id %}">
                     Voltar
                 </a>
             </div>
         </div>
-        <div class="row">
-            <div class="col pt-4">
-                <b class="mx-3">Progresso da obra:</b>
-                <div class="progress mx-3">                                
-                    <div class="progress-bar {% if progresso == 100 %}bg-success{% endif %}" role="progressbar" style="width: {{progresso}}%;" aria-valuenow="{{progresso}}" aria-valuemin="0" aria-valuemax="100">{{progresso}}%</div>
-                  </div>
-                  <small class="mx-3">
-                      <span class="me-4">Valor previsto: R$<span class="valor" id="previsto">{{previsto}}</span></span>
-                      <span>Total abatido: R$<span class="valor" id="abatido">{{soma_notas}}</span></span>
-                  </small>
+        <div class="row px-4">
+            <div class="col pt-4 bg-secondary text-center text-white">
+                <h1 class="pb-3">ARQUIVO</h1>
             </div>
         </div> 
         <div class="row">
             <div class="col" id="searchResult">                   
                 <div class="p-3">
-                    <div class="mb-2" style="background-color: #d6e7f8;">
+                    <div class="mb-2" style="background-color: #a5a5a5;">
                         <div class="py-3 px-3">                        
                             <div class="d-flex ps-4">
                                 <span class="my-auto"><b>id: </b>{{obra.id}}</span>
                                 <span class="ms-auto">
-                                    <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
+                                    <!-- <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
                                         <i class="fas fa-plus-circle me-2"></i>
                                         Nova Medição
-                                    </button>
-                                    <button onclick="exibirNotas('all', '{{obra.id}}')" class="btn btn-outline-primary me-2">
+                                    </button> -->
+                                    <button onclick="exibirNotas('all', '{{obra.id}}')" class="btn btn-outline-dark me-2">
                                         <i class="far fa-eye me-2"></i>
                                         Todas Medições
                                     </button>
@@ -74,7 +59,7 @@
                                                     <span class="d-flex mt-3">
                                                         <b>N. EMPENHO:</b> 
                                                         <span class="ms-2">{{nota.n_nota}}</span>
-                                                        <a href="{% url 'obra:editar_empenho' obra.id nota.id %}" class="btn p-0 ms-3 text-primary d-flex" style="margin-top: -3px;" data-toggle="tooltip" data-placement="top" title="Editar">
+                                                        <a href="{% url 'obra:editar_empenho' obra.id nota.id %}" class="btn p-0 ms-3 text-secondary d-flex" style="margin-top: -3px;" data-toggle="tooltip" data-placement="top" title="Editar">
                                                             <span>
                                                                 <i class="fas fa-edit"></i>
                                                             </span>
@@ -118,19 +103,13 @@
                                 </tbody>
                             </table>
                             <div class="row px-3">
-                                <div class="col px-4 py-2 d-flex bg-primary text-white">
+                                <div class="col px-4 py-2 d-flex bg-dark text-white">
                                     <b class="me-3">Valor total:</b> R$<span class="valor" id="total-empenhos">{{soma_empenhos}}</span> 
                                 </div>
                             </div>     
                         </div>
                         <div  id="exibirNotasAqui" class="col">
-                            {% if messages %} 
-                            {% for message in messages %}
-                            <div{% if message.tags %} class="bg-{{ message.tags }} text-white mt-5 p-4"{% endif %}>
-                                {{ message }}
-                            </div>
-                            {% endfor %}                                                       
-                            {% endif %}        
+                           
                         </div>
                     </div>
                 </div>
@@ -196,7 +175,7 @@ font-weight: bold;
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 <script>
     function exibirNotas(filter, value){
-        var url = '/get_notas/';  // get the url of the `load_cities` view        
+        var url = '/get_notas_arquivadas/';  // get the url of the `load_cities` view        
         $.ajax({ 
             url: url,
             data: {

@@ -6,10 +6,11 @@ from .models import *
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.contrib import messages
 from settings.settings import BASE_DIR
 import os
 
-from .functions import get_client_ip, progresso_obra
+from .functions import get_client_ip, progresso_obra, testarSeFoiAbatido
 
 # Create your views here.
 def index(request):
@@ -70,6 +71,48 @@ def visualizar_empresa(request, id):
         'empresa': Empresa.objects.get(id=id)
     }
     return render(request, 'fiscalizacao/listar_itens_empresa.html', context)
+
+
+@login_required
+def editar_empenho(request, id, id_empenho): 
+    empenho=Nota_Empenho.objects.get(id=id_empenho)
+    form=Form_Empenho(instance=empenho)
+    if request.method=='POST':  
+        form=Form_Empenho(request.POST, instance=empenho)           
+        if form.is_valid():
+            empenho=form.save() 
+            context={
+                'form': form,
+                'id': id,
+                'success': 'Empenho atualizado com sucesso!'
+            }
+            return render(request, 'fiscalizacao/editar_empenho.html', context)                            
+    context={
+            'form': form,
+            'id': id,
+            'id_empenho': id_empenho
+    }
+    return render(request, 'fiscalizacao/editar_empenho.html', context)
+
+@login_required
+def editar_nota(request, id, id_nota): 
+    nota=Nota_Fiscal.objects.get(id=id_nota)
+    form=Form_Nota(instance=nota)
+    if request.method=='POST':  
+        form=Form_Nota(request.POST, instance=nota)           
+        if form.is_valid():
+            form.save() 
+            context={
+                'form': form,
+                'id': id,
+                'success': 'Medição atualizada com sucesso!'
+            }
+            return render(request, 'fiscalizacao/editar_nota.html', context)                            
+    context={
+            'form': form,
+            'id': id
+    }
+    return render(request, 'fiscalizacao/editar_nota.html', context)
 
 @login_required
 def editar_empresa(request, id): 
@@ -171,11 +214,10 @@ def get_empresa(request):
     }
     return render(request, 'fiscalizacao/get_empresa.html', context)
 
-def get_empenhos(request):
-    print(request.GET.get('id'))
+def get_empenhos(request):    
     contrato=Contrato.objects.get(id=request.GET.get('id'))
     context={
-        'empenhos': contrato.nota_empenho.all,
+        'empenhos': contrato.nota_empenho.filter(ativo=True, abatido=False),
     }
     return render(request, 'fiscalizacao/get_empenhos.html', context)
 
@@ -185,7 +227,7 @@ def get_notas(request):
         if request.GET.get('filter')=='all':
             contrato=Contrato.objects.get(id=request.GET.get('id'))
             notas=[]            
-            for i in contrato.nota_empenho.all():                
+            for i in contrato.nota_empenho.filter(ativo=True):                
                 nf=Nota_Fiscal.objects.filter(empenho=i).order_by('id')
                 for n in nf:
                     notas.append(n)
@@ -209,10 +251,45 @@ def get_notas(request):
         'filter': request.GET.get('filter'),
         'notas': notas,        
         'id': empenho_id,
-        'soma_notas': soma_notas
-
+        'soma_notas': soma_notas,   
+        'obra_id': request.GET.get('obra_id')     
     }
     return render(request, 'fiscalizacao/get_notas_fiscais.html', context)
+
+def get_notas_arquivadas(request):
+    # print(request.GET.get('id'))
+    try:        
+        if request.GET.get('filter')=='all':
+            contrato=Contrato.objects.get(id=request.GET.get('id'))
+            notas=[]            
+            for i in contrato.nota_empenho.filter(ativo=False):                
+                nf=Nota_Fiscal.objects.filter(empenho=i).order_by('id')
+                for n in nf:
+                    notas.append(n)
+
+            empenho_id=request.GET.get('id')
+        else:
+            empenho=Nota_Empenho.objects.get(id=request.GET.get('id'))
+            notas=Nota_Fiscal.objects.filter(empenho=empenho).order_by('id') 
+            empenho_id=empenho.n_nota   
+    except Exception as E:
+        print(E)
+        notas=[]    
+    soma_notas=0
+    for nota in notas:
+        try:
+            soma_notas+=int(nota.valor)
+        except:
+            soma_notas+=0
+
+    context={
+        'filter': request.GET.get('filter'),
+        'notas': notas,        
+        'id': empenho_id,
+        'soma_notas': soma_notas,   
+        'obra_id': request.GET.get('obra_id')     
+    }
+    return render(request, 'fiscalizacao/get_notas_fiscais_arquivadas.html', context)
 
 @login_required
 def cadastrar_obra(request):    
@@ -280,17 +357,39 @@ def cadastrar_obra(request):
     return render(request, 'fiscalizacao/cadastrar_obra.html', context)
 
 @login_required
+def arquivar_empenho(request, id, id_empenho):    
+    try:
+        empenho=Nota_Empenho.objects.get(id=id_empenho)
+        notas=Nota_Fiscal.objects.filter(empenho=empenho)        
+        soma_notas=0
+        for nota in notas:
+            soma_notas+=int(nota.valor)
+
+        if int(empenho.valor)==soma_notas:            
+            empenho.ativo=False
+            empenho.save()
+            messages.success(request, 'Empenho de id: '+str(id_empenho)+' foi arquivado.')
+        elif int(empenho.valor)>soma_notas:
+            messages.error(request, 'Empenho de id: '+str(id_empenho)+' ainda não foi abatido. Tente substituir em vez de arquivar.')
+        elif int(empenho.valor)<soma_notas:
+            messages.error(request, 'Empenho de id: '+str(id_empenho)+' está com notas com valores acima do empenho.')
+    except Exception as E:
+        messages.error(request, str(E))
+    return redirect('obra:visualizar_notas', id=id)
+
+@login_required
 def cadastrar_empenho(request, contrato_id):
     form=Form_Empenho()
     success=''
     if request.method=='POST':
         form=Form_Empenho(request.POST)
         if form.is_valid():
-            obj=form.save()
+            obj=form.save()                        
             cont=Contrato.objects.get(id=contrato_id)
             cont.nota_empenho.add(obj)
             cont.save()
             obj.ativo=True
+            obj.tipo_empenho='co'
             obj.save()
             success='Novo empenho cadastrado com sucesso!'                    
             form=Form_Empenho()
@@ -355,7 +454,7 @@ def visualizar_fotos_obra(request, id):
             pass
         count=len(files)                
         if count>0:
-            foto=Fotos(obra=Obra.objects.get(id=id), url="")
+            foto=Fotos(obra=obra.obra, url="")
             foto.save()
             if foto.id<10:
                 foto.url='0'+str(foto.id)+'.jpg'            
@@ -444,7 +543,10 @@ def visualizar_notas(request, id):
     if request.method=='POST':  
         form=Form_Nota(request.POST)                
         if form.is_valid():
-            form.save()    
+            nota=form.save()    
+            if testarSeFoiAbatido(nota):
+                nota.empenho.abatido=True
+                nota.empenho.save()
         else: 
             print(form.errors)                    
     else:
@@ -470,6 +572,38 @@ def visualizar_notas(request, id):
         'previsto': previsto
     }
     return render(request, 'fiscalizacao/listar_notas_obra.html', context)
+
+@login_required
+def visualizar_notas_arquivadas(request, id):
+    if request.method=='POST':  
+        form=Form_Nota(request.POST)                
+        if form.is_valid():
+            form.save()    
+        else: 
+            print(form.errors)                    
+    else:
+        # form=Form_Nota(initial={'cadastrado_por':request.user})
+        form=Form_Nota()
+    
+    contratos=Contrato.objects.get(id=id)
+    soma_notas, percent, soma_empenhos, previsto=progresso_obra(contratos, False)
+    if percent!=0:
+        progresso=int(soma_notas/percent)
+        if progresso >= 100:
+            progresso=100            
+    else:
+        progresso=0
+
+    context={
+        'obra': {'id': id},
+        'notas':contratos.nota_empenho.filter(ativo=False),
+        'form': form,
+        'progresso': progresso,
+        'soma_empenhos': soma_empenhos,
+        'soma_notas': soma_notas,
+        'previsto': previsto
+    }
+    return render(request, 'fiscalizacao/listar_notas_obra_arquivadas.html', context)
 
 @login_required
 def editar_obra(request, id):

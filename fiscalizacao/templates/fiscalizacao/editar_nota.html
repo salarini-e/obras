@@ -13,31 +13,39 @@
 <div class="row">    
     <div class="col container p-5">
         <div class="d-flex">
-            <h1 class="text-uppercase">Cadastrar empenho</h1>            
+            <h1 class="text-uppercase">Editar empenho</h1>            
             <span class="ms-auto">
+                <a class="btn btn-danger" href="{% url 'obra:visualizar_notas' id %}">
+                    <i class="fas fa-archive me-2"></i>Arquivar
+                </a>
                 <a class="btn btn-primary" href="{% url 'obra:visualizar_notas' id %}">
                     Voltar
                 </a>
             </span>
         </div>
-        <form method="post" class="form col-5">            
-            {% csrf_token %}
-            <br>
-            <div id="contrato">
-            {% for f_nota in form %}
-            {% if f_nota.label == 'Data de expediçã do empenho' %}
-            <label for="">{{f_nota.label}}:</label>
-            {{f_nota|add_class:'form-control mb-3'}}  
-            {% else %}
-            <label for="">{{f_nota.label}}:</label>
-            {{f_nota|add_class:'form-control mb-3'|attr:'type:text'|attr:'autocomplete:off'}}            
-            {% endif %}
-            {% endfor %}       
-                {% buttons %}
-                    <button type="submit" class="btn btn-primary">CONFIRMAR</button>
-                {% endbuttons %}
-            </div>         
-        </form>
+        <div class="row">
+            <form method="post" class="form col-5">            
+                {% csrf_token %}
+                <br>
+                <div id="contrato">
+                {% for f_nota in form %}
+                {% if f_nota.label == 'Data de expediçã do empenho' %}
+                <label for="">{{f_nota.label}}:</label>
+                {{f_nota|add_class:'form-control mb-3'}}  
+                {% else %}
+                <label for="">{{f_nota.label}}:</label>
+                {{f_nota|add_class:'form-control mb-3'|attr:'type:text'|attr:'autocomplete:off'}}            
+                {% endif %}
+                {% endfor %}       
+                    {% buttons %}
+                        <button type="submit" class="btn btn-primary">                            
+                            CONFIRMAR
+                        </button>
+                    {% endbuttons %}
+                </div>         
+            </form>
+            
+        </div>
     </div>
 </div>
 <script>

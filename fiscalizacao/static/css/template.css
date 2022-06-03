@@ -49,3 +49,6 @@ input{
 .form-control{
     border-radius: 0 !important;
 }
+.bg-error{
+    background-color: rgb(192, 48, 48);
+}

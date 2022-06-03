@@ -17,7 +17,16 @@ class Nota_Empenho(models.Model):
         ('s', 'Semana'),        
         ('d', 'Dia'),        
     ]
-    
+    TIPO_CHOICES=[
+        ('in', 'Inicial'),
+        ('sd', 'Substituido'),
+        ('st', 'Substituto'),        
+        ('co', 'Complementar'),        
+    ]
+
+    tipo_empenho=models.CharField(max_length=2, choices=TIPO_CHOICES, default='in', verbose_name='Tipo de empenho')    
+    substituto=models.IntegerField(verbose_name='N. da nota de empenho', blank=True, default=0)
+    substituindo=models.IntegerField(verbose_name='N. da nota de empenho', blank=True, default=0)
     n_nota=models.IntegerField(verbose_name='N. da nota de empenho')
     data=models.DateField(verbose_name='Data de expediçã do empenho')
     valor=models.CharField(max_length=20,verbose_name='Valor do empenho(R$)')
@@ -25,6 +34,7 @@ class Nota_Empenho(models.Model):
     periodo=models.CharField( max_length=5,verbose_name='Período do empenho')
     url=models.CharField(max_length=300, default='#', verbose_name='Link da nota do empenho')
     ativo=models.BooleanField(default=False)
+    abatido=models.BooleanField(default=False)
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão') 
 
 
