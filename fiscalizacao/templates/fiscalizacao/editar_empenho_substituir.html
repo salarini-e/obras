@@ -13,7 +13,7 @@
 <div class="row">    
     <div class="col container p-5">
         <div class="d-flex">
-            <h1 class="text-uppercase">Editar empenho</h1>            
+            <h1 class="text-uppercase">Substituir empenho</h1>            
             <span class="ms-auto">
                 <a class="btn btn-danger" href="{% url 'obra:arquivar_empenho' id id_empenho %}">
                     <i class="fas fa-archive me-2"></i>Arquivar
@@ -24,11 +24,10 @@
             </span>
         </div>
         <div class="row">
-            <form method="post" class="form col-5">            
-                {% csrf_token %}
-                <br>
+            <div class="col pt-5">
+                <h2>Empenho</h2>                                          
                 <div id="contrato">
-                {% for f_nota in form %}
+                {% for f_nota in form_d %}
                 {% if f_nota.label == 'Data de expediçã do empenho' %}
                 <label for="">{{f_nota.label}}:</label>
                 {{f_nota|add_class:'form-control mb-3'}}  
@@ -36,21 +35,32 @@
                 <label for="">{{f_nota.label}}:</label>
                 {{f_nota|add_class:'form-control mb-3'|attr:'type:text'|attr:'autocomplete:off'}}            
                 {% endif %}
-                {% endfor %}       
-                    {% buttons %}
-                        <button type="submit" class="btn btn-primary">                            
-                            CONFIRMAR
-                        </button>
-                    {% endbuttons %}
+                {% endfor %}                          
                 </div>         
-            </form>
-            <div class="col d-flex pt-5">
-                <div class="mx-auto">
-                    <a href="{% url 'obra:substituir_empenho' id id_empenho %}" class="btn btn-warning p-4">
-                        <i class="fas fa-file-export me-2"></i>
-                        Substituir Empenho
-                    </a>
-                </div>
+            </div>
+            <div class="col pt-5">
+                <h2>Empenho substituto</h2>
+                <form method="POST">
+                {% csrf_token %}
+                {% for f_nota in form %}
+                {% if f_nota.label == 'Data de expediçã do empenho' %}                
+                <label for="">{{f_nota.label}}:</label>
+                {{f_nota|add_class:'form-control mb-3'}}  
+                {% elif f_nota.label == 'Tipo de empenho' %}
+                {{f_nota}}
+                {% elif f_nota.label == 'Substituindo' %}
+                {{f_nota}}
+                {% else %}
+                <label for="">{{f_nota.label}}:</label>
+                {{f_nota|add_class:'form-control mb-3'|attr:'type:text'|attr:'autocomplete:off'}}            
+                {% endif %}
+                {% endfor %}    
+                {% buttons %}
+                <button type="submit" class="btn btn-primary">                            
+                    CONFIRMAR
+                </button>
+                {% endbuttons %}
+                </form>
             </div>
         </div>
     </div>

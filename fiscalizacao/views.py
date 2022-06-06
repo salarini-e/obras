@@ -1,7 +1,7 @@
 from textwrap import indent
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from .forms import Form_Contrato, Form_Fiscal, Form_Nota, Form_Empenho, Form_Obras, Form_Empresa
+from .forms import Form_Contrato, Form_Fiscal, Form_Nota, Form_Empenho_Desabilitado, Form_Empenho, Form_Obras, Form_Empresa
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
@@ -81,6 +81,8 @@ def editar_empenho(request, id, id_empenho):
         form=Form_Empenho(request.POST, instance=empenho)           
         if form.is_valid():
             empenho=form.save() 
+            empenho.tipo_empenho='co'
+            empenho.save()
             context={
                 'form': form,
                 'id': id,
@@ -93,6 +95,45 @@ def editar_empenho(request, id, id_empenho):
             'id_empenho': id_empenho
     }
     return render(request, 'fiscalizacao/editar_empenho.html', context)
+
+@login_required
+def substituir_empenho(request, id, id_empenho):     
+    empenho=Nota_Empenho.objects.get(id=id_empenho)
+    form_d=Form_Empenho_Desabilitado(instance=empenho)
+    notas=Nota_Fiscal.objects.filter(empenho=empenho)
+    soma=0
+    for nota in notas:
+        soma+=int(nota.valor)
+    form=Form_Empenho(initial={'tipo_empenho': 'st','valor':int(empenho.valor)-soma, 'substituindo': id_empenho})
+    if request.method=='POST':  
+        form=Form_Empenho(request.POST)           
+        if form.is_valid():            
+            novo_empenho=form.save() 
+            empenho.substituto=novo_empenho.id
+            empenho.tipo_empenho='sd'
+            empenho.save()
+            contrato=Contrato.objects.get(id=id)
+            contrato.nota_empenho.add(novo_empenho)
+            contrato.save()
+            novo_empenho.ativo=True            
+            novo_empenho.save()
+            empenho.ativo=False
+            empenho.save()
+
+            context={
+                'form_d': form_d,
+                'form': form,
+                'id': id,
+                'success': 'Empenho substituido com sucesso!'
+            }
+            return render(request, 'fiscalizacao/editar_empenho_substituir.html', context)                            
+    context={
+            'form_d': form_d,
+            'form': form,
+            'id': id,
+            'id_empenho': id_empenho
+    }
+    return render(request, 'fiscalizacao/editar_empenho_substituir.html', context)
 
 @login_required
 def editar_nota(request, id, id_nota): 

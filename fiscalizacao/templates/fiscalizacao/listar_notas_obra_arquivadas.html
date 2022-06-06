@@ -83,12 +83,16 @@
                                             </table>                                                                                              
                                             <div class="row">
                                                 <div class="col px-4 pb-2 d-flex">
-                                                    <span><b>Data de inclusão:</b> {{nota.dt_inclusao}}</span>
+                                                    <span><b>Data de inclusão:</b> {{nota.dt_inclusao}}</span>                                                    
+                                                    {% if nota.abatido %}
                                                     <span class="btn text-success p-0 ms-auto d-flex pt-2" data-toggle="tooltip" data-placement="top" title="Empenho abatido">
-                                                        {% if nota.abatido %}
-                                                        <i class="fas fa-check-circle"></i>
-                                                        {% endif %}
-                                                    </span>
+                                                        <i class="fas fa-check-circle"></i>                                                        
+                                                    </span>                                                    
+                                                    {% elif nota.tipo_empenho == 'sd'%}
+                                                    <span class="btn text-warning p-0 ms-auto d-flex pt-2" data-toggle="tooltip" data-placement="top" title="Empenho substituido">
+                                                    <i class="fas fa-sync-alt"></i>
+                                                    </span>                                                    
+                                                    {% endif %}                                                    
                                                     <a onclick="exibirNotas(false, '{{nota.id}}')" class="btn text-info p-0 ms-2 d-flex">                                                        
                                                         <span class="pt-1">
                                                             <i class="far fa-copy"></i>

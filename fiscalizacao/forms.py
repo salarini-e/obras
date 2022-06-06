@@ -43,13 +43,32 @@ class Form_Empresa(ModelForm):
         return cnpj
 
 
-class Form_Empenho(ModelForm): 
-
+class Form_Empenho(ModelForm):     
     class Meta:
         model = Nota_Empenho
         widgets = {'valor': forms.TextInput(attrs={'onkeydown':"maskValor(this)"}),
-                   'tipo_periodo': forms.Select(attrs={'class':'form-select mb-3'}),}        
-        exclude = ['ativo', 'dt_inclusao', 'tipo_empenho', 'abatido', 'substituido', 'substituindo']
+                   'tipo_periodo': forms.Select(attrs={'class':'form-select mb-3'}),
+                   'tipo_empenho': forms.TextInput(attrs={'hidden':'true'}),
+                   'substituindo': forms.TextInput(attrs={'hidden':'true'})}               
+        exclude = ['ativo', 'dt_inclusao', 'abatido', 'substituto']        
+
+    def clean_valor(self):                        
+        valor=self.cleaned_data["valor"]
+        valor = valor.replace('.', '')
+        valor = valor.replace(',', '')        
+        return valor
+
+class Form_Empenho_Desabilitado(ModelForm): 
+
+    class Meta:
+        model = Nota_Empenho
+        widgets = {'n_nota': forms.TextInput(attrs={'disabled':'true'}),
+                    'data': forms.DateInput(attrs={'disabled':'true'}),
+                   'valor': forms.TextInput(attrs={'onkeydown':"maskValor(this)", 'disabled':'true'}),
+                   'tipo_periodo': forms.Select(attrs={'class':'form-select mb-3', 'disabled':'true'}),
+                   'periodo': forms.TextInput(attrs={'disabled':'true'}),
+                   'url': forms.TextInput(attrs={'disabled':'true'}),}        
+        exclude = ['ativo', 'dt_inclusao', 'tipo_empenho', 'abatido', 'substituto', 'substituindo']
 
     def clean_valor(self):                        
         valor=self.cleaned_data["valor"]

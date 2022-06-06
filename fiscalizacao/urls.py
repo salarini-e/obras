@@ -32,6 +32,7 @@ urlpatterns = [
     path('dados-obras/v/<id>/notas', views.visualizar_notas, name='visualizar_notas' ),
     path('dados-obras/v/<id>/notas_arquivadas', views.visualizar_notas_arquivadas, name='visualizar_notas_arquivadas' ),
     path('dados-obras/v/<id>/notas/editar-empenho/<id_empenho>', views.editar_empenho, name='editar_empenho' ),
+    path('dados-obras/v/<id>/notas/editar-empenho/<id_empenho>/substituir', views.substituir_empenho, name='substituir_empenho' ),
     path('dados-obras/v/<id>/notas/arquivar-empenho/<id_empenho>', views.arquivar_empenho, name='arquivar_empenho' ),
     path('dados-obras/v/<id>/notas/editar-nota/<id_nota>', views.editar_nota, name='editar_nota' ),
     path('dados-obras/v/<contrato_id>/notas/cad_empenho', views.cadastrar_empenho, name='cadastrar_empenho' ),

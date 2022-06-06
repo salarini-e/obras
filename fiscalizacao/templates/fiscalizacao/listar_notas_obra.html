@@ -74,12 +74,25 @@
                                                     <span class="d-flex mt-3">
                                                         <b>N. EMPENHO:</b> 
                                                         <span class="ms-2">{{nota.n_nota}}</span>
-                                                        <a href="{% url 'obra:editar_empenho' obra.id nota.id %}" class="btn p-0 ms-3 text-primary d-flex" style="margin-top: -3px;" data-toggle="tooltip" data-placement="top" title="Editar">
+                                                        <a href="{% url 'obra:editar_empenho' obra.id nota.id %}" class="btn p-0 ms-3 text-primary d-flex" style="margin-top: -3px;" data-toggle="tooltip" data-placement="top" title="Editar">                                                        
                                                             <span>
                                                                 <i class="fas fa-edit"></i>
                                                             </span>
                                                             <span class="my-auto ms-1 pt-1"></span>  
                                                         </a>
+                                                        {% if nota.tipo_empenho == 'st' %}
+                                                        <span class="btn p-0 ms-3 text-warning d-flex" style="margin-top: -3px;" data-toggle="tooltip" data-placement="top" title="{{nota.get_tipo_empenho_display}} - id {{nota.substituindo}}">                                                            
+                                                            <span>
+                                                                <i class="fas fa-exclamation"></i>
+                                                            </span>
+                                                        </span>
+                                                        {% elif nota.tipo_empenho == 'co' %}
+                                                        <span class="btn p-0 ms-3 text-success d-flex" style="margin-top: -3px;" data-toggle="tooltip" data-placement="top" title="{{nota.get_tipo_empenho_display}}">
+                                                            <span>
+                                                                <i class="fas fa-exclamation"></i>
+                                                            </span>
+                                                        </span>
+                                                        {% endif %}
                                                     </span>
                                                     <span class="ms-auto mt-3"><b>id:</b> {{nota.id}}</span>
                                                 </div>
