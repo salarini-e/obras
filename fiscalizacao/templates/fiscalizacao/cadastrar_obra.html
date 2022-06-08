@@ -123,6 +123,20 @@
             }
         });                
     };
+    function remove_empenho(e){
+            empenhos=document.getElementById('id_empenhos').value;
+            lista_empenhos=empenhos.split(';')            
+            lista_empenhos.pop()
+            document.getElementById('id_empenhos').value=''
+            lista_empenhos.forEach(element => {
+                if(element!=e.id){
+                    document.getElementById('id_empenhos').value+=element+';'
+                }                
+            });
+            document.getElementById('l'+e.id).style.display='none'
+            
+    }
+
     function add_empenho(){
             n_nota=document.getElementById('id_n_nota').value
             data=document.getElementById('id_data').value
@@ -140,7 +154,8 @@
                                 xhr.setRequestHeader('Content-Type', 'application/json');
                             },
                             dataType: "json",
-                            data: JSON.stringify({                            
+                            data: JSON.stringify({  
+                                'tipo_empenho':'in',
                                 'n_nota': n_nota,
                                 'data': data,
                                 'valor': valor,

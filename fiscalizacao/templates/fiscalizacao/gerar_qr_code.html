@@ -15,8 +15,8 @@
 </style>
 <div id="print_page" class="d-flex">
 <div>
-    <button onclick="printQR()" class="btn btn-dark" style="position: absolute; right: 125px; margin-top: 1px;">Imprimir</button>
-    <a href="{% url 'obra:visualizar_obra' obra_id %}" class="btn btn-secondary" style="position: absolute; right: 48px; margin-top: 1px;">Voltar</a>
+    <button onclick="printQR()" class="btn btn-primary" style="position: absolute; right: 125px; margin-top: 1px;">Imprimir</button>
+    <a href="{% url 'obra:visualizar_obra' obra_id %}" class="btn btn-primary" style="position: absolute; right: 48px; margin-top: 1px;">Voltar</a>
 </div>
 <div>
     {% load qr_code %}

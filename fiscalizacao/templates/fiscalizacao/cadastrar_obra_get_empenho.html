@@ -3,10 +3,10 @@
 {{nota}}
 
 {% else %}
-<tr>
+<tr id="l{{nota.n_nota}}">
     <td>{{nota.n_nota}}</td>
     <td>R$ <span class="valor" id="nota-{{nota.id}}">{{nota.valor}}</span></td>
     <td>{{nota.periodo}} ({{nota.tipo_periodo}})</td>
-    <th><button onclick="(e)=>{console.log(e.target.id)}" id="{{nota.n_nota}}" type="button" class="btn">X</button></th>
+    <th><button id="{{nota.n_nota}}" onclick="remove_empenho(this)" id="{{nota.n_nota}}" type="button" class="btn">X</button></th>
 </tr>
 {% endif %}

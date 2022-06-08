@@ -602,13 +602,17 @@ def visualizar_notas(request, id):
             progresso=100            
     else:
         progresso=0
+    empenhos_exercicio=contratos.nota_empenho.filter(ativo=True)
+    v_total=0
+    for nota in empenhos_exercicio:
+        v_total+=int(nota.valor)
 
     context={
         'obra': {'id': id},
-        'notas':contratos.nota_empenho.filter(ativo=True),
+        'notas':empenhos_exercicio,
         'form': form,
         'progresso': progresso,
-        'soma_empenhos': soma_empenhos,
+        'soma_empenhos': v_total,
         'soma_notas': soma_notas,
         'previsto': previsto
     }
@@ -634,13 +638,18 @@ def visualizar_notas_arquivadas(request, id):
             progresso=100            
     else:
         progresso=0
-
+    
+    empenhos_arquivados=contratos.nota_empenho.filter(ativo=False)
+    v_total=0
+    for nota in empenhos_arquivados:
+        v_total+=int(nota.valor)
+    
     context={
         'obra': {'id': id},
-        'notas':contratos.nota_empenho.filter(ativo=False),
+        'notas': empenhos_arquivados,
         'form': form,
         'progresso': progresso,
-        'soma_empenhos': soma_empenhos,
+        'soma_empenhos': v_total,
         'soma_notas': soma_notas,
         'previsto': previsto
     }

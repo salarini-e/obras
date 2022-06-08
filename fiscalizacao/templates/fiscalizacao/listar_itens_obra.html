@@ -71,9 +71,9 @@
                                     <b>Fiscal Responsável:</b><br>                      
                                     <span>{{obra.obra.fiscal}}</span>
                                 </td>  
-                                <td colspan="2" class="px-3">
-                                    <b>Status:</b><br>                      
-                                    <span>{{obra.obra.status}}</span>
+                                <td colspan="2" class="px-3 row">
+                                    <b>Status:</b> <br>                     
+                                    <span class='{% if obra.obra.status.nome == "Em andamento" %}bg-info{% elif obra.obra.status.nome == "Em processo licitação" %}bg-warning{% elif obra.obra.status.nome == "Obra paralisada" %}bg-danger{% elif obra.obra.status.nome == "Finalizado" %}bg-success{% endif %} text-white text-center bolder p-1 w-100' >{{obra.obra.status}}</span>
                                 </td>  
                                  
                             </tr>   
