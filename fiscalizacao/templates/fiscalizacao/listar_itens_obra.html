@@ -11,6 +11,7 @@
                 <h1>DADOS DA OBRA</h1>
             </div>
             <div class="col d-flex" style="position: relative;">   
+                {% if request.user.is_authenticated %}
                 <a class="btn btn-primary ms-auto me-2 my-auto" href="{% url 'obra:gerar_qrcode' obra.id %}">
                     QR Code <i class="fas fa-qrcode ms-2"></i>
                 </a>             
@@ -20,6 +21,7 @@
                 <a class="btn btn-primary my-auto" href="{% url 'obra:visualizar' obra.id %}">
                     Voltar
                 </a>
+                {% endif %}
             </div>
         </div>
         <div class="row">
@@ -29,9 +31,9 @@
                         <div class="py-3 px-3">                        
                             <div class="d-flex ps-4">
                                 <span class="my-auto"><b>id: </b>{{obra.id}}</span>
-                                <span class="ms-auto">
+                                <span class="ms-auto">                                    
                                     <a href="{% url 'obra:visualizar_fotos_obra' obra.id %}" class="btn btn-outline-success me-2">Fotos</a>
-                                    <a href="{% url 'obra:visualizar_notas' obra.id %}" class="btn btn-outline-success">Notas</a>
+                                    <a href="{% url 'obra:visualizar_notas' obra.id %}" class="btn btn-outline-success">Notas</a>                                    
                                 </span>
                             </div>
                         </div>
@@ -85,6 +87,7 @@
                                     </p>
                                 </td>
                             </tr>
+                            {% if request.user.is_authenticated %}
                             <tr>
                                 <td colspan="2">
                                     <b class="ms-2">Data de Inclusão:</b> <span>{{obra.obra.dt_inclusao}}</span>
@@ -98,6 +101,7 @@
                                 <td></td>                               
 
                             </tr>
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>

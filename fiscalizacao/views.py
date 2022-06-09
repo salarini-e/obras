@@ -473,7 +473,6 @@ def listar_obras(request, valor_busca):
     }
     return render(request, 'fiscalizacao/listar_obras.html', context)
 
-@login_required
 def visualizar_obra(request, id):
     obra=Contrato.objects.get(id=id)
     context={
@@ -700,14 +699,12 @@ def editar_obra(request, id):
 
 @login_required
 def gerar_qr_code(request, obra_id):
-    conteudo = f'''localhost:8000/gerar-qr-code/{obra_id}'''
+    conteudo = f'''obras.pmnf.rj.gov.br/dados-obras/v/{obra_id}'''
     context={
         'conteudo': conteudo,
         'obra_id': obra_id
     }
-
     return render(request, 'fiscalizacao/gerar_qr_code.html', context)    
-
 
 def login_view(request):
     if request.method == 'POST':
