@@ -13,6 +13,7 @@ import os
 from .functions import get_client_ip, progresso_obra, testarSeFoiAbatido
 
 # Create your views here.
+@login_required
 def index(request):
     return render(request, 'index.html')
 
