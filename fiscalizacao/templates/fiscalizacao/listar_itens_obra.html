@@ -19,6 +19,7 @@
                     Editar <i class="fas fa-pencil-alt ms-2"></i>
                 </a>       
                 <a class="btn btn-primary my-auto" href="{% url 'obra:visualizar' obra.id %}">
+                    <i class="far fa-arrow-alt-circle-left me-2"></i>
                     Voltar
                 </a>
                 {% endif %}
@@ -61,18 +62,22 @@
                                 </td>           
                             </tr>    
                             <tr>                   
-                                <td colspan="2" class="px-3">
+                                <td colspan="0" class="px-3">
                                     <b>CNPJ da empresa:</b><br>                      
                                     <span id="cnpj">{{obra.empresa.cnpj}}</span>
                                 </td>         
-                                <td colspan="2">
+                                <td colspan="1">
                                     <b>População atendida:</b><br>
                                     <span>{{obra.obra.populacao_atendida}}</span>
                                 </td>
                                 <td colspan="2" class="px-3">
                                     <b>Fiscal Responsável:</b><br>                      
                                     <span>{{obra.obra.fiscal}}</span>
-                                </td>  
+                                </td>
+                                <td colspan="2" class="px-3">
+                                    <b>Fiscal Substituto:</b><br>                      
+                                    <span>{{obra.obra.fiscal_substituto}}</span>
+                                </td>   
                                 <td colspan="2" class="px-3 row">
                                     <b>Status:</b> <br>                     
                                     <span class='{% if obra.obra.status.nome == "Em andamento" %}bg-info{% elif obra.obra.status.nome == "Em processo licitação" %}bg-warning{% elif obra.obra.status.nome == "Obra paralisada" %}bg-danger{% elif obra.obra.status.nome == "Finalizado" %}bg-success{% endif %} text-white text-center bolder p-1 w-100' >{{obra.obra.status}}</span>
@@ -88,6 +93,17 @@
                                 </td>
                             </tr>
                             {% if request.user.is_authenticated %}
+                            <tr>
+                                <td colspan="2">
+                                    <b class="ms-2 me-3">Nº processo administrativo:</b> <span>{{obra.obra.n_processo_adm}}</span>
+                                </td>
+                                <td colspan="4" >
+                                    <b>N processo de pagamento:</b> <span class="text-capitalize ms-3">{{obra.obra.n_processo_pagamento}}</span>
+                                </td>
+                         
+                                     
+
+                            </tr>
                             <tr>
                                 <td colspan="2">
                                     <b class="ms-2">Data de Inclusão:</b> <span>{{obra.obra.dt_inclusao}}</span>

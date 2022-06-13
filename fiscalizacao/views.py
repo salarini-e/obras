@@ -449,7 +449,7 @@ def get_obras(request):
     valor=request.GET.get('nome')
 
     if valor!='':
-        complexQuery = Q(empresa__nome__icontains=valor) | Q(id__icontains=valor) | Q(obra__objeto_da_obra__icontains=valor)
+        complexQuery = Q(empresa__nome__icontains=valor) | Q(id__icontains=valor) | Q(obra__objeto_da_obra__icontains=valor) | Q(obra__status__nome__icontains=valor) | Q(obra__fiscal__nome__icontains=valor)
         obras=Contrato.objects.filter(complexQuery)
         context={           
             'obras': obras

@@ -7,9 +7,9 @@
     <div class="col container p-5">
         <div class="row">
             <div class="col">
-                <h1>DADOS DA EXECUÇÃO DA OBRA</h1>
+                <h2>DADOS DA EXECUÇÃO DA OBRA</h2>
             </div>
-            <div class="col-4 d-flex" style="position: relative;"> 
+            <div class="col d-flex" style="position: relative;"> 
                 <a href="{% url 'obra:visualizar_notas_arquivadas' obra.id %}" type="button" class="btn btn-secondary my-auto ms-auto">
                     <i class="fas fa-archive me-2"></i>
                     Arquivo
@@ -18,7 +18,12 @@
                     <i class="fas fa-plus-circle me-2"></i>
                     Novo Empenho
                 </a>
+                <a href="#" type="button" class="btn btn-danger my-auto ms-2">
+                    <i class="fas fa-calendar-plus me-2"></i>
+                    Aditivar
+                </a>
                 <a class="btn btn-primary my-auto ms-2" href="{% url 'obra:visualizar_obra' obra.id %}">
+                    <i class="far fa-arrow-alt-circle-left me-2"></i>
                     Voltar
                 </a>
             </div>

@@ -31,7 +31,11 @@
             <td>{{contrato.obra.objeto_da_obra}}</td>                            
             <td>R$ <span class="valor" id="valor-{{contrato.id}}">{{contrato.obra.valor_previsto}}</span></td>
             <td>{{contrato.obra.fiscal}}</td>            
-            <td>{{contrato.obra.status}}</td>  
+            <td class="d-flex">
+                <span class='{% if contrato.obra.status.nome == "Em andamento" %}bg-info{% elif contrato.obra.status.nome == "Em processo licitação" %}bg-warning{% elif contrato.obra.status.nome == "Obra paralisada" %}bg-danger{% elif contrato.obra.status.nome == "Finalizado" %}bg-success{% endif %} text-white text-center bolder p-1 w-100' >
+                    {{contrato.obra.status}}
+                </span>
+            </td>  
             <td>
                 <a href="{% url 'obra:gerar_qrcode' contrato.id %}" data-toggle="tooltip" data-placement="top" title="Gerar QR Code">
                     <i class="fas fa-qrcode"></i> 

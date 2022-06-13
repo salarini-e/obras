@@ -14,7 +14,9 @@
     <div class="col container p-5">
         <div class="d-flex">
             <h1 class="text-uppercase">Cadastrar empresa</h1>            
-            <span class="ms-auto"><a class="btn btn-primary" href="{% url 'obra:listar_empresa' %}">Listar Empresas</a></span>
+            <span class="ms-auto"><a class="btn btn-primary" href="{% url 'obra:listar_empresa' %}">
+                <i class="fas fa-list-ol me-2"></i>
+                Listar Empresas</a></span>
         </div>
         <form method="post" class="form col-5">            
             {% csrf_token %}
