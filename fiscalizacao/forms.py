@@ -48,8 +48,9 @@ class Form_Empenho(ModelForm):
         model = Nota_Empenho
         widgets = {'valor': forms.TextInput(attrs={'onkeydown':"maskValor(this)"}),
                    'tipo_periodo': forms.Select(attrs={'class':'form-select mb-3'}),
-                   'tipo_empenho': forms.TextInput(attrs={'hidden':'true'}),
-                   'substituindo': forms.TextInput(attrs={'hidden':'true'})}               
+                   'tipo_empenho': forms.HiddenInput(),
+                   'substituindo': forms.HiddenInput()
+                   }
         exclude = ['ativo', 'dt_inclusao', 'abatido', 'substituto']        
 
     def clean_valor(self):                        

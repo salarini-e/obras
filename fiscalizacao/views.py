@@ -150,6 +150,8 @@ def editar_nota(request, id, id_nota):
                 'success': 'Medição atualizada com sucesso!'
             }
             return render(request, 'fiscalizacao/editar_nota.html', context)                            
+        else:
+            print(form.errors)
     context={
             'form': form,
             'id': id
@@ -481,7 +483,6 @@ def visualizar_obra(request, id):
     }
     return render(request, 'fiscalizacao/listar_itens_obra.html', context)
 
-@login_required
 def visualizar_fotos_obra(request, id):
     obra=Contrato.objects.get(id=id)    
     if request.method=='POST':
@@ -579,7 +580,7 @@ def arquivar_foto_obra(request, id, url):
     }
     return render(request, 'fiscalizacao/listar_foto_obra_apagar.html', context)
 
-@login_required
+
 def visualizar_notas(request, id):
     if request.method=='POST':  
         form=Form_Nota(request.POST)                
@@ -618,7 +619,6 @@ def visualizar_notas(request, id):
     }
     return render(request, 'fiscalizacao/listar_notas_obra.html', context)
 
-@login_required
 def visualizar_notas_arquivadas(request, id):
     if request.method=='POST':  
         form=Form_Nota(request.POST)                

@@ -24,7 +24,9 @@
                             <div class="d-flex ps-4">
                                 <span class="my-auto"><b>id: </b>{{obra.id}}</span>
                                 <span class="ms-auto">
+                                    {% if request.user.is_authenticated %}
                                     <button class="btn btn-outline-danger me-2">Arquivar todas as fotos</button>
+                                    {% endif %}
                                     <!-- <button class="btn btn-success">Notas</button> -->
                                 </span>
                             </div>
@@ -38,15 +40,18 @@
                                     <tr>                   
                                         <td class="px-3 py-3 d-flex flex-column">
                                            <img class="mx-auto" height="300px" src="/static/fotos/{{obra.id}}/{{foto.url}}" alt="">
+                                           {% if request.user.is_authenticated %}
                                            <a href="{% url 'obra:visualizar_foto_obra' id=obra.id url=foto.url %}" class="btn btn-info w-100 mt-2">
                                                <b class="text-white">Ver/Editar foto</b>
                                            </a>
+                                           {% endif %}
                                         </td>                                                 
                                     </tr>                                         
                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
+                        {% if request.user.is_authenticated %}
                         <div class="col d-flex">
                             <div class="mx-auto py-5">
                                 <form method="POST" enctype="multipart/form-data">
@@ -57,6 +62,7 @@
                                 </form>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

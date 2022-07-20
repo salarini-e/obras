@@ -62,7 +62,7 @@ class Nota_Fiscal(models.Model):
 
 
     def __str__(self):
-        return '%s' % (self.n_nota)
+        return '%s - %s' % (self.id, self.n_nota)
 
 class Nota_Fiscal_Arquivada(models.Model):    
     nota=models.ForeignKey(Nota_Fiscal, on_delete=models.CASCADE)

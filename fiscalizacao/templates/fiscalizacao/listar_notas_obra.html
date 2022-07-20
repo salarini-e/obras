@@ -9,11 +9,13 @@
             <div class="col">
                 <h2>DADOS DA EXECUÇÃO DA OBRA</h2>
             </div>
+            
             <div class="col d-flex" style="position: relative;"> 
                 <a href="{% url 'obra:visualizar_notas_arquivadas' obra.id %}" type="button" class="btn btn-secondary my-auto ms-auto">
                     <i class="fas fa-archive me-2"></i>
                     Arquivo
                 </a>
+                {% if request.user.is_authenticated %}
                 <a href="{% url 'obra:cadastrar_empenho' obra.id %}" type="button" class="btn btn-primary my-auto ms-2">
                     <i class="fas fa-plus-circle me-2"></i>
                     Novo Empenho
@@ -22,11 +24,14 @@
                     <i class="fas fa-calendar-plus me-2"></i>
                     Aditivar
                 </a>
+                {% endif %}
                 <a class="btn btn-primary my-auto ms-2" href="{% url 'obra:visualizar_obra' obra.id %}">
                     <i class="far fa-arrow-alt-circle-left me-2"></i>
                     Voltar
                 </a>
+             
             </div>
+            
         </div>
         <div class="row">
             <div class="col pt-4">
@@ -48,15 +53,17 @@
                             <div class="d-flex ps-4">
                                 <span class="my-auto"><b>id: </b>{{obra.id}}</span>
                                 <span class="ms-auto">
+                                    {% if request.user.is_authenticated %}
                                     <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
                                         <i class="fas fa-plus-circle me-2"></i>
                                         Nova Medição
                                     </button>
+                                    {% endif %}
                                     <button onclick="exibirNotas('all', '{{obra.id}}')" class="btn btn-outline-primary me-2">
                                         <i class="far fa-eye me-2"></i>
                                         Todas Medições
                                     </button>
-                                    <!-- <button class="btn btn-success">Notas</button> -->
+                                    
                                 </span>
                             </div>
                         </div>
@@ -79,12 +86,14 @@
                                                     <span class="d-flex mt-3">
                                                         <b>N. EMPENHO:</b> 
                                                         <span class="ms-2">{{nota.n_nota}}</span>
+                                                        {% if request.user.is_authenticated %}
                                                         <a href="{% url 'obra:editar_empenho' obra.id nota.id %}" class="btn p-0 ms-3 text-primary d-flex" style="margin-top: -3px;" data-toggle="tooltip" data-placement="top" title="Editar">                                                        
                                                             <span>
                                                                 <i class="fas fa-edit"></i>
                                                             </span>
                                                             <span class="my-auto ms-1 pt-1"></span>  
                                                         </a>
+                                                        {% endif %}
                                                         {% if nota.tipo_empenho == 'st' %}
                                                         <span class="btn p-0 ms-3 text-warning d-flex" style="margin-top: -3px;" data-toggle="tooltip" data-placement="top" title="{{nota.get_tipo_empenho_display}} - id {{nota.substituindo}}">                                                            
                                                             <span>
@@ -156,6 +165,7 @@
         </div>      
     </div>
 </div>
+{% if request.user.is_authenticated %}
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -196,6 +206,7 @@
     </div>
   </div>
 </div>
+{% endif %}
 <style>
     html, body{
         width: 100%;

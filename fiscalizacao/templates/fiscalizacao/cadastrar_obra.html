@@ -86,11 +86,15 @@
         <div class="modal-body">
             {% for f_nota in form_nota %}
             {% if f_nota.label == 'Data de expediçã do empenho' %}
-            <label for="">{{f_nota.label}}:</label>
-            {{f_nota|add_class:'form-control mb-3'|attr:'type:date'}}  
+                <label for="">{{f_nota.label}}:</label>
+                {{f_nota|add_class:'form-control mb-3'|attr:'type:date'}}  
+            {% elif f_nota.label == 'Tipo de empenho' %}
+
+            {% elif f_nota.label == 'Substituindo' %}
             {% else %}
-            <label for="">{{f_nota.label}}:</label>
-            {{f_nota|add_class:'form-control mb-3'|attr:'type:text'|attr:'autocomplete:off'}}            
+
+                <label for="">{{f_nota.label}}:</label>
+                {{f_nota|add_class:'form-control mb-3'|attr:'type:text'|attr:'autocomplete:off'}}            
             {% endif %}
             {% endfor %}                                
         </div>

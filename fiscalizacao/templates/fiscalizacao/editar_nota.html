@@ -13,7 +13,7 @@
 <div class="row">    
     <div class="col container p-5">
         <div class="d-flex">
-            <h1 class="text-uppercase">Editar empenho</h1>            
+            <h1 class="text-uppercase">Editar medição</h1>            
             <span class="ms-auto">
                 <a class="btn btn-danger" href="{% url 'obra:visualizar_notas' id %}">
                     <i class="fas fa-archive me-2"></i>Arquivar
@@ -30,8 +30,11 @@
                 <div id="contrato">
                 {% for f_nota in form %}
                 {% if f_nota.label == 'Data de expediçã do empenho' %}
-                <label for="">{{f_nota.label}}:</label>
+                <label for="">{{f_nota.label}}:</label>                
                 {{f_nota|add_class:'form-control mb-3'}}  
+                {% elif f_nota.label == 'Empenho' %}
+                {{f_nota|add_class:'form-control mb-3'|attr:'hidden'}}  
+                {% elif f_nota.label == 'Valor' %}
                 {% else %}
                 <label for="">{{f_nota.label}}:</label>
                 {{f_nota|add_class:'form-control mb-3'|attr:'type:text'|attr:'autocomplete:off'}}            

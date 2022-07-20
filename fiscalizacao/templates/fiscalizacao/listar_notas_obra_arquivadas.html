@@ -60,12 +60,14 @@
                                                     <span class="d-flex mt-3">
                                                         <b>N. EMPENHO:</b> 
                                                         <span class="ms-2">{{nota.n_nota}}</span>
+                                                        {% if request.user.is_authenticated %}
                                                         <a href="{% url 'obra:editar_empenho' obra.id nota.id %}" class="btn p-0 ms-3 text-secondary d-flex" style="margin-top: -3px;" data-toggle="tooltip" data-placement="top" title="Editar">
                                                             <span>
                                                                 <i class="fas fa-edit"></i>
                                                             </span>
                                                             <span class="my-auto ms-1 pt-1"></span>  
                                                         </a>
+                                                        {% endif %}
                                                     </span>
                                                     <span class="ms-auto mt-3"><b>id:</b> {{nota.id}}</span>
                                                 </div>
