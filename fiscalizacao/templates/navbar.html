@@ -21,6 +21,9 @@
             {% endif %}            
             {% if request.user.is_superuser %}
             <a class="ms-auto" href="/django-admin"><i class="fas fa-user-cog me-2"></i>Administração</a>
+            {% elif request.user.is_staff %}
+            Olá, {{request.user.first_name}}!
+            {% endif %}
             {% endif %}
         </div>
     </div>
