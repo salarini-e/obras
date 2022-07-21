@@ -26,9 +26,9 @@
             <br>
             <div id="contrato">
             {% for f_nota in form %}
-            {% if f_nota.label == 'Data de expediçã do empenho' %}
+            {% if f_nota.label == 'Data de expedição do empenho' %}
             <label for="">{{f_nota.label}}:</label>
-            {{f_nota|add_class:'form-control mb-3'}}  
+            {{f_nota|add_class:'form-control mb-3'|attr:'type:date'}}   
             {% else %}
             <label for="">{{f_nota.label}}:</label>
             {{f_nota|add_class:'form-control mb-3'|attr:'type:text'|attr:'autocomplete:off'}}            
@@ -41,6 +41,8 @@
         </form>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 <script>
     function icnpj(v){
         v=v.replace(/\D/g,"")                    //Remove tudo o que nao e digito
@@ -58,6 +60,9 @@
     }            
     function execmascara(){
         v_obj.value=v_fun(v_obj.value)
-    }    
+    }   
+    function maskValor(input){    
+        $(input).mask('#.##0.000,00', {reverse: true});
+    } 
 </script>
 {% endblock %}
