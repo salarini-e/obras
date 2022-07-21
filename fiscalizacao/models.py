@@ -57,6 +57,7 @@ class Nota_Fiscal(models.Model):
     tipo_periodo=models.CharField(max_length=1, choices=PERIODO_CHOICES, default='a', verbose_name='Tipo de Período')
     periodo=models.CharField( max_length=5,verbose_name='Período')
     url=models.CharField(max_length=300, default='#', verbose_name='Link da nota')
+    ativo=models.BooleanField(default=False, null=True)
     obs=models.TextField(verbose_name='Observações')
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão') 
 

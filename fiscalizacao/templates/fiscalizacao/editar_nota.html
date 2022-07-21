@@ -15,10 +15,10 @@
         <div class="d-flex">
             <h1 class="text-uppercase">Editar medição</h1>            
             <span class="ms-auto">
-                <a class="btn btn-danger" href="{% url 'obra:visualizar_notas' id %}">
+                <a class="btn btn-danger" href="{% url 'obra:arquivar_nota' id id_nota %}">
                     <i class="fas fa-archive me-2"></i>Arquivar
                 </a>
-                <a class="btn btn-primary" href="{% url 'obra:visualizar_notas' id %}">
+                <a class="btn btn-primary" href="{% url 'obra:visualizar_notas' id_nota %}">
                     Voltar
                 </a>
             </span>

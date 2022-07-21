@@ -34,7 +34,7 @@
                       </thead>
                       <tbody>
                         {% for fiscal in fiscais %}
-                        <tr>
+                        <tr style="cursor: pointer;" onclick="window.open('{% url 'obra:editar_fiscal' fiscal.id %}', '_self')">
                           <th  scope="row">{{fiscal.id}}</th>
                           <td>{{fiscal.nome}}</td>
                           <td class="crea">{{fiscal.crea}}</td>
