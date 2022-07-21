@@ -147,6 +147,7 @@ def editar_nota(request, id, id_nota):
             context={
                 'form': form,
                 'id': id,
+                'id_nota': id_nota,
                 'success': 'Medição atualizada com sucesso!'
             }
             return render(request, 'fiscalizacao/editar_nota.html', context)                            
@@ -154,7 +155,8 @@ def editar_nota(request, id, id_nota):
             print(form.errors)
     context={
             'form': form,
-            'id': id
+            'id': id,
+            'id_nota': id_nota
     }
     return render(request, 'fiscalizacao/editar_nota.html', context)
 
@@ -225,6 +227,27 @@ def cadastrar_fiscal(request):
     return render(request, 'fiscalizacao/cadastrar_fiscais.html', context)
 
 @login_required
+def editar_fiscal(request, id): 
+    fiscal=Fiscal.objects.get(id=id)
+    form=Form_Fiscal(instance=fiscal)
+    if request.method=='POST':  
+        form_=Form_Fiscal(request.POST, instance=fiscal)           
+        if form_.is_valid():
+            fiscal=form_.save()                         
+            context={
+                'form': form_,
+                'success': 'Cadastrada do fiscal atualizado com sucesso!'
+            }
+            return render(request, 'fiscalizacao/cadastrar_fiscais.html', context) 
+        else:
+            form=form_      
+    
+    context={
+            'form': form,
+    }
+    return render(request, 'fiscalizacao/editar_fiscal.html', context)
+
+@login_required
 def listar_empresa(request):
     context={
         'empresas': Empresa.objects.all()
@@ -272,14 +295,14 @@ def get_notas(request):
             contrato=Contrato.objects.get(id=request.GET.get('id'))
             notas=[]            
             for i in contrato.nota_empenho.filter(ativo=True):                
-                nf=Nota_Fiscal.objects.filter(empenho=i).order_by('id')
+                nf=Nota_Fiscal.objects.filter(empenho=i, ativo=True).order_by('id')
                 for n in nf:
                     notas.append(n)
 
             empenho_id=request.GET.get('id')
         else:
             empenho=Nota_Empenho.objects.get(id=request.GET.get('id'))
-            notas=Nota_Fiscal.objects.filter(empenho=empenho).order_by('id') 
+            notas=Nota_Fiscal.objects.filter(empenho=empenho, ativo=True).order_by('id') 
             empenho_id=empenho.n_nota   
     except Exception as E:
         print(E)
@@ -299,6 +322,18 @@ def get_notas(request):
         'obra_id': request.GET.get('obra_id')     
     }
     return render(request, 'fiscalizacao/get_notas_fiscais.html', context)
+
+def arquivar_nota(request, id, id_nota):    
+    try:
+        notas=Nota_Fiscal.objects.get(id=id_nota)        
+
+        notas.ativo=False
+        notas.save()
+        messages.success(request, 'Nota de id: '+str(id_nota)+' foi arquivado.')
+
+    except Exception as E:
+        messages.error(request, str(E))
+    return redirect('obra:visualizar_notas', id)
 
 def get_notas_arquivadas(request):
     # print(request.GET.get('id'))
@@ -585,7 +620,9 @@ def visualizar_notas(request, id):
     if request.method=='POST':  
         form=Form_Nota(request.POST)                
         if form.is_valid():
-            nota=form.save()    
+            nota=form.save()
+            nota.ativo=True
+            nota.save()    
             if testarSeFoiAbatido(nota):
                 nota.empenho.abatido=True
                 nota.empenho.save()

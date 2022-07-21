@@ -15,7 +15,7 @@ def progresso_obra(contratos, ativo=True):
     ids=[]
     for i in contratos.nota_empenho.all():
         soma_empenhos+=int(i.valor)
-        notas_fiscais=Nota_Fiscal.objects.filter(empenho=i)
+        notas_fiscais=Nota_Fiscal.objects.filter(empenho=i, ativo=True)
         for n in notas_fiscais:
             soma_notas+=int(n.valor)
         
@@ -23,7 +23,7 @@ def progresso_obra(contratos, ativo=True):
     return soma_notas, percent, soma_empenhos, previsto
 
 def testarSeFoiAbatido(nota):
-    notas=Nota_Fiscal.objects.filter(empenho=nota.empenho)
+    notas=Nota_Fiscal.objects.filter(empenho=nota.empenho, ativo=True)
     soma_notas=0
     for n in notas:
         soma_notas+=int(n.valor)

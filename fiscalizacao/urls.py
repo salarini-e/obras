@@ -35,6 +35,7 @@ urlpatterns = [
     path('dados-obras/v/<id>/notas/editar-empenho/<id_empenho>/substituir', views.substituir_empenho, name='substituir_empenho' ),
     path('dados-obras/v/<id>/notas/arquivar-empenho/<id_empenho>', views.arquivar_empenho, name='arquivar_empenho' ),
     path('dados-obras/v/<id>/notas/editar-nota/<id_nota>', views.editar_nota, name='editar_nota' ),
+    path('dados-obras/v/<id>/notas/arquivar-nota/<id_nota>', views.arquivar_nota, name='arquivar_nota' ),
     path('dados-obras/v/<contrato_id>/notas/cad_empenho', views.cadastrar_empenho, name='cadastrar_empenho' ),
 
     path('cadastrar-empresa/', views.cadastrar_empresa, name='cadastrar_empresa' ),
@@ -46,6 +47,8 @@ urlpatterns = [
 
     path('cadastrar-fiscal/', views.cadastrar_fiscal, name='cadastrar_fiscal' ),
     path('listar-fiscais/', views.listar_fiscais, name='listar_fiscais' ),
+    path('editar-fiscal/<id>', views.editar_fiscal, name='editar_fiscal' ),
+
 
     # path('ver-obra/', views.fiscalizar_obra, name='buscar' ),
     # path('ver-obra/<valor_busca>', views.fiscalizar_obra, name='visualizar' ),

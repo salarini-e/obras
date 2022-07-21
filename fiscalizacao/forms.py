@@ -83,7 +83,7 @@ class Form_Nota(ModelForm):
         model = Nota_Fiscal
         widgets = {'valor': forms.TextInput(attrs={'onkeydown':"maskValor(this)"}),
                    'tipo_periodo': forms.Select(attrs={'class':'form-select mb-3'}),}        
-        exclude = ['dt_inclusao']
+        exclude = ['dt_inclusao', 'ativo']
 
     def clean_valor(self):                        
         valor=self.cleaned_data["valor"]
