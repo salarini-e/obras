@@ -9,7 +9,7 @@ class Form_Obras(ModelForm):
     class Meta:
         model = Obra
         widgets = {'cadastrado_por': forms.HiddenInput(),                   
-                   'valor_previsto': forms.TextInput(attrs={'onkeydown':"maskValor(this)"}),
+                   'valor_previsto': forms.TextInput(attrs={'onkeydown':"maskValor(this)", 'onload':"maskValor(this)"}),
                    'status': forms.Select(attrs={'class':'form-select mb-3'}),
                    'fiscal': forms.Select(attrs={'class':'form-select mb-3'}),
                    'fiscal_substituto': forms.Select(attrs={'class':'form-select mb-3'}),}
@@ -46,7 +46,7 @@ class Form_Empresa(ModelForm):
 class Form_Empenho(ModelForm):     
     class Meta:
         model = Nota_Empenho
-        widgets = {'valor': forms.TextInput(attrs={'onkeydown':"maskValor(this)"}),
+        widgets = {'valor': forms.TextInput(attrs={'onkeydown':"maskValor(this)", 'onload':"maskValor(this)"}),
                    'tipo_periodo': forms.Select(attrs={'class':'form-select mb-3'}),
                    'tipo_empenho': forms.HiddenInput(),
                    'substituindo': forms.HiddenInput()
@@ -65,7 +65,7 @@ class Form_Empenho_Desabilitado(ModelForm):
         model = Nota_Empenho
         widgets = {'n_nota': forms.TextInput(attrs={'disabled':'true'}),
                     'data': forms.DateInput(attrs={'disabled':'true'}),
-                   'valor': forms.TextInput(attrs={'onkeydown':"maskValor(this)", 'disabled':'true'}),
+                   'valor': forms.TextInput(attrs={'onkeydown':"maskValor(this)", 'disabled':'true', 'onload':"maskValor(this)"}),
                    'tipo_periodo': forms.Select(attrs={'class':'form-select mb-3', 'disabled':'true'}),
                    'periodo': forms.TextInput(attrs={'disabled':'true'}),
                    'url': forms.TextInput(attrs={'disabled':'true'}),}        

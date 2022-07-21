@@ -224,6 +224,9 @@ font-weight: bold;
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 <script>
+    function maskValor(input){    
+        $(input).mask('#.##0.000,00', {reverse: true});
+    }
     function exibirNotas(filter, value){
         var url = '/get_notas/';  // get the url of the `load_cities` view        
         $.ajax({ 
