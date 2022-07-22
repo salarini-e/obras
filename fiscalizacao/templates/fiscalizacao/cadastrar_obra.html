@@ -64,14 +64,14 @@
             <h4 class="text-uppercase mt-5">Dados da obra</h4>
             <div id="obra" class="mt-2">
                 {% for f_obra in form_obra %}
-                {% if f_nota.label == 'Data prevista de conclusão' %}
-                <label for="">{{f_nota.label}}:</label>
-                {{f_nota|add_class:'form-control mb-3'|attr:'type:date'}}
-                {% elif f_obra.name != 'cadastrado_por' %}
-                <label for="">{{f_obra.label}}:</label>
-
-                {% endif %}
-                {{f_obra|add_class:'form-control mb-3'|attr:'autocomplete:off'}}            
+                    {% if f_obra.label == 'Data prevista de conclusão' %}
+                        <label for="">{{f_obra.label}}:</label>
+                        {{f_obra|add_class:'form-control mb-3'|attr:'type:date'}}
+                    {% elif f_obra.name != 'cadastrado_por' %}
+                        <label for="">{{f_obra.label}}:</label>
+                        {{f_obra|add_class:'form-control mb-3'|attr:'autocomplete:off'}}            
+                    {% endif %}
+                    
                 {% endfor %}
                 {% buttons %}
                     <button type="submit" class="btn btn-primary">REGISTRAR</button>
