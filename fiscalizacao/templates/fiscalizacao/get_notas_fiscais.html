@@ -24,12 +24,12 @@
                             <thead>                                                    
                                 <th>Data de Expedição:</th>
                                 <th>Valor:</th>
-                                <th>Período:</th>                                                    
+                                <th>Período medição:</th>                                                                                                        
                             </thead>
                             <tbody>                                                    
                                 <td>{{nota.data}}</td>
                                 <td>R$ <span class="valor" id="valor-{{id}}-{{nota.id}}">{{nota.valor}}</span></td>
-                                <td>{{nota.periodo}} ({{nota.get_tipo_periodo_display}})</td>                                                    
+                                <td>{{nota.periodo_inicial|date:'d/m/y'}} <i>até</i> {{nota.periodo_final|date:'d/m/y'}}</td>                                                    
                             </tbody>
                         </table>                                                                                              
                         <div class="row">

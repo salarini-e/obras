@@ -1,11 +1,13 @@
 Editar Fiscais
-
-Cadastrar Obra -> Remover Empenho do Banco ao Apagar
-Cadastrar Obra -> Remoer Labels a mais do Form de Empenho
-
-Listar Dados da Obra -> Incluir novas informações
 Editar Dados da Obra -> Acertar máscaras
-
-
 DADOS DA EXECUÇÃO DA OBRA -> Acertar máscaras em Nova Medição
 DADOS DA EXECUÇÃO DA OBRA -> Acertar máscaras em Novo Empenho
+
+
+Cadastrar Obra -> Remover Empenho do Banco ao Apagar
+
+
+Listar Dados da Obra -> Incluir novas informações
+
+
+

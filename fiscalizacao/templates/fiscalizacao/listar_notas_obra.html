@@ -120,7 +120,7 @@
                                                 <tbody>                                                    
                                                     <td>{{nota.data}}</td>
                                                     <td>R$ <span class="valor" id="valor-{{nota.id}}">{{nota.valor}}</span></td>
-                                                    <td>{{nota.periodo}} ({{nota.get_tipo_periodo_display}})</td>                                                    
+                                                    <td>{{nota.data|date:'Y'}}</td>                                                    
                                                 </tbody>
                                             </table>                                                                                              
                                             <div class="row">
@@ -181,6 +181,12 @@
             <div id="nota_fiscal" class="mt-4">
                 {% for f_nota in form %}
                 {% if f_nota.label == 'Data de expedição fiscal' %}
+                <label for="">{{f_nota.label}}:</label>
+                {{f_nota|add_class:'form-control mb-3'|attr:'type:date'}} 
+                {% elif f_nota.label == 'Período inicial da medição' %}
+                <label for="">{{f_nota.label}}:</label>
+                {{f_nota|add_class:'form-control mb-3'|attr:'type:date'}} 
+                {% elif f_nota.label == 'Período final da medição' %}
                 <label for="">{{f_nota.label}}:</label>
                 {{f_nota|add_class:'form-control mb-3'|attr:'type:date'}} 
                 {% elif f_nota.label == 'Empenho' %}

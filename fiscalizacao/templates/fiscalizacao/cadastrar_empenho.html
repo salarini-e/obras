@@ -29,6 +29,10 @@
             {% if f_nota.label == 'Data de expedição do empenho' %}
             <label for="">{{f_nota.label}}:</label>
             {{f_nota|add_class:'form-control mb-3'|attr:'type:date'}}   
+            {% elif f_nota.label == 'Tipo de empenho' %}
+            {{f_nota|add_class:'form-control mb-3'|attr:'type:hidden'}}   
+            {% elif f_nota.label == 'Substituindo' %}
+            {{f_nota|add_class:'form-control mb-3'|attr:'type:hidden'}}   
             {% else %}
             <label for="">{{f_nota.label}}:</label>
             {{f_nota|add_class:'form-control mb-3'|attr:'type:text'|attr:'autocomplete:off'}}            

@@ -146,8 +146,6 @@
             n_nota=document.getElementById('id_n_nota').value
             data=document.getElementById('id_data').value
             valor=document.getElementById('id_valor').value
-            tipo_periodo=document.getElementById('id_tipo_periodo').value
-            periodo=document.getElementById('id_periodo').value
             url=document.getElementById('id_url').value
 
             $.ajax({ 
@@ -163,9 +161,7 @@
                                 'tipo_empenho':'in',
                                 'n_nota': n_nota,
                                 'data': data,
-                                'valor': valor,
-                                'tipo_periodo': tipo_periodo,
-                                'periodo': periodo,
+                                'valor': valor,                                
                                 'url': url
                             }),
                             success: (data) => {                               

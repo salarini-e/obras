@@ -11,12 +11,12 @@ class Status(models.Model):
 
 class Nota_Empenho(models.Model):
     
-    PERIODO_CHOICES=[
-        ('a', 'Ano'),
-        ('m', 'Mês'),
-        ('s', 'Semana'),        
-        ('d', 'Dia'),        
-    ]
+    # PERIODO_CHOICES=[
+    #     ('a', 'Ano'),
+    #     ('m', 'Mês'),
+    #     ('s', 'Semana'),        
+    #     ('d', 'Dia'),        
+    # ]
     TIPO_CHOICES=[
         ('in', 'Inicial'),
         ('sd', 'Substituido'),
@@ -30,8 +30,8 @@ class Nota_Empenho(models.Model):
     n_nota=models.IntegerField(verbose_name='N. da nota de empenho', unique=True)
     data=models.DateField(verbose_name='Data de expedição do empenho')
     valor=models.CharField(max_length=20,verbose_name='Valor do empenho(R$)')
-    tipo_periodo=models.CharField(max_length=1, choices=PERIODO_CHOICES, default='a', verbose_name='Tipo de período do empenho')
-    periodo=models.CharField( max_length=5,verbose_name='Período do empenho')
+    # tipo_periodo=models.CharField(max_length=1, choices=PERIODO_CHOICES, default='a', verbose_name='Tipo de período do empenho')
+    # periodo=models.CharField( max_length=5,verbose_name='Período do empenho')
     url=models.CharField(max_length=300, default='#', verbose_name='Link da nota do empenho')
     ativo=models.BooleanField(default=False)
     abatido=models.BooleanField(default=False)
@@ -43,19 +43,20 @@ class Nota_Empenho(models.Model):
 
 class Nota_Fiscal(models.Model):
     
-    PERIODO_CHOICES=[
-        ('a', 'Ano'),
-        ('m', 'Mês'),
-        ('s', 'Semana'),        
-        ('d', 'Dia'),        
-    ]
+    # PERIODO_CHOICES=[
+    #     ('a', 'Ano'),
+    #     ('m', 'Mês'),
+    #     ('s', 'Semana'),        
+    #     ('d', 'Dia'),        
+    # ]
     
     empenho=models.ForeignKey(Nota_Empenho, on_delete=models.CASCADE)
     n_nota=models.CharField(max_length=100 ,verbose_name='N. da nota fiscal')
     data=models.DateField(verbose_name='Data de expedição fiscal')
     valor=models.CharField(max_length=20,verbose_name='Valor da nota (R$)')
-    tipo_periodo=models.CharField(max_length=1, choices=PERIODO_CHOICES, default='a', verbose_name='Tipo de Período')
-    periodo=models.CharField( max_length=5,verbose_name='Período')
+    # tipo_periodo=models.CharField(max_length=1, choices=PERIODO_CHOICES, default='a', verbose_name='Tipo de Período')
+    periodo_inicial=models.DateField(verbose_name='Período inicial da medição')
+    periodo_final=models.DateField(verbose_name='Período final da medição')
     url=models.CharField(max_length=300, default='#', verbose_name='Link da nota')
     ativo=models.BooleanField(default=False, null=True)
     obs=models.TextField(verbose_name='Observações')
