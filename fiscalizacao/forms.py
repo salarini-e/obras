@@ -8,11 +8,12 @@ class Form_Obras(ModelForm):
 
     class Meta:
         model = Obra
-        widgets = {'cadastrado_por': forms.HiddenInput(),                   
+        widgets = {
                    'valor_previsto': forms.TextInput(attrs={'onkeydown':"maskValor(this)", 'onload':"maskValor(this)"}),
                    'status': forms.Select(attrs={'class':'form-select mb-3'}),
                    'fiscal': forms.Select(attrs={'class':'form-select mb-3'}),
-                   'fiscal_substituto': forms.Select(attrs={'class':'form-select mb-3'}),}
+                   'fiscal_substituto': forms.Select(attrs={'class':'form-select mb-3'}),
+                   }
         exclude = ['dt_inclusao']
     
     def clean_valor_previsto(self):                        

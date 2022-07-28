@@ -101,7 +101,7 @@ class Obra(models.Model):
     engenheiro=models.CharField(max_length=250, verbose_name='Nome do engenheiro responsável', default='')
     justificativa=models.TextField(verbose_name='Justificativa')
     data_conclusao=models.DateField(verbose_name='Data prevista de conclusão', blank=True, null=True)
-    cadastrado_por=models.ForeignKey(User, on_delete=models.PROTECT)
+    cadastrado_por=models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão') 
     #latitude e longitude
     

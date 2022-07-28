@@ -396,6 +396,8 @@ def cadastrar_obra(request):
             if form_obra.is_valid() and len(list_empenhos)>0:            
                 try:
                     obra=form_obra.save()
+                    obra.cadastrado_por=request.user
+                    obra.save()
                     contrato=Contrato(obra=obra, empresa=empresa)
                     contrato.save()
                     try:
@@ -415,10 +417,14 @@ def cadastrar_obra(request):
                 context={      
                     'error': error,               
                     'form_nota': Form_Empenho(),
-                    'form_obra': Form_Obras(),
-                    'success': 'Obracadastrada com sucesso!'
+                    'form_obra': Form_Obras(initial={'cadastrado_por':request.user}),
+                    'success': 'Obra cadastrada com sucesso!'
                 }
                 return render(request, 'fiscalizacao/cadastrar_obra.html', context)
+            else:
+                print(form_obra.errors)
+                print(len(list_empenhos))
+                error='ERROR'    
         else:
             print(form_obra.errors)
             print(len(list_empenhos))
