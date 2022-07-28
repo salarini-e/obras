@@ -32,7 +32,7 @@
             <td>R$ <span class="valor" id="valor-{{contrato.id}}">{{contrato.obra.valor_previsto}}</span></td>
             <td>{{contrato.obra.fiscal}}</td>            
             <td class="d-flex">
-                <span class='{% if contrato.obra.status.nome == "Em andamento" %}bg-info{% elif contrato.obra.status.nome == "Paralisado" %}bg-warning{% elif contrato.obra.status.nome == "Finalizado" %}bg-success{% endif %} text-white text-center bolder p-1 w-100' >
+                <span class='{% if contrato.obra.status.nome == "Em andamento" %}bg-info{% elif contrato.obra.status.nome == "Paralisada" %}bg-warning{% elif contrato.obra.status.nome == "Finalizada" %}bg-success{% endif %} text-white text-center bolder p-1 w-100' >
                     {{contrato.obra.status}}
                 </span>
             </td>  
